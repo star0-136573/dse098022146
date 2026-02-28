@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Portal</title>
+    
+    <style>
+        :root {
+            /* Your existing variables */
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --bg: #f4f7f6;
+            
+            /* Component specific variables */
+            --card-bg: #ffffff;
+            --text-muted: #7f8c8d;
+            --art-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            background: var(--bg); 
+            display: flex; 
+            flex-direction: column; 
+            height: 100vh; 
+            color: var(--primary); /* Overriding 'white' for readability on light bg */
+        }
+        /* Tab Bar */
+        .tab-bar { display: flex; background: var(--primary); color: white; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .tab { flex: 1; padding: 18px; text-align: center; transition: 0.3s; border-bottom: 4px solid transparent; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
+        .tab:hover { background: #34495e; }
+        .tab.active { background: #34495e; border-bottom-color: var(--accent); font-weight: bold; }
+
+        /* Page Content */
+        .page { display: none; padding: 30px; flex: 1; overflow-y: auto; max-width: 75%; margin: 0 auto; width: 100%; box-sizing: border-box; }
+        .page.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Vocabulary Styles */
+        .vocab-input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        input { padding: 10px; border: 1px solid #ccc; border-radius: 4px; flex: 1; }
+        button { padding: 10px 20px; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .vocab-list { background: white; border-radius: 8px; padding: 0; list-style: none; border: 1px solid #ddd; }
+        .vocab-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        .vocab-item:last-child { border-bottom: none; }
+
+        /* Writing Styles */
+        .editor-container { background: white; border-radius: 8px; border: 1px solid #ddd; height: 400px; padding: 20px; outline: none; }
+        .toolbar { margin-bottom: 10px; }
+        .toolbar button { background: #eee; color: #333; margin-right: 5px; padding: 5px 10px; }
+
+        /* 中文 (Chinese) Styles */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, 60px); gap: 10px; margin-top: 20px; }
+        .character-box { width: 60px; height: 60px; border: 2px solid #e74c3c; background: white; display: flex; align-items: center; justify-content: center; font-size: 2rem; position: relative; }
+        .character-box::after, .character-box::before { content: ''; position: absolute; border: 0.5px dashed #ff9a90; }
+        .character-box::after { width: 100%; height: 0; top: 50%; }
+        .character-box::before { width: 0; height: 100%; left: 50%; }
+
+         /* ... keeping previous styles ... */
+        .vocab-item { 
+            display: flex; 
+            align-items: center; 
+            background: white; 
+            margin-bottom: 10px; 
+            padding: 15px; 
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .vocab-info { flex-grow: 1; }
+        .speak-btn { 
+            background: #2ecc71; 
+            margin-left: 10px; 
+            font-size: 1.2rem; 
+            padding: 5px 12px;
+        }
+        .speak-btn:hover { background: #27ae60; }
+
+        /* Hide definition by default */
+.definition {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    color: #7f8c8d;
+    margin-left: 10px;
+}
+
+/* Show definition when hovering over the parent item */
+.vocab-item:hover .definition {
+    opacity: 1;
+}
+
+/* Visual cue that it's interactive */
+.vocab-item {
+    cursor: help;
+}
+.vocab-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    margin-bottom: 8px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+
+.vocab-info strong:hover {
+    color: #3498db;
+    background: #f0f8ff;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 1.1rem;
+}
+
+.img-btn { background: #e8f0fe; color: #1a73e8; }
+.img-btn:hover { background: #d2e3fc; }
+
+.speak-btn { background: #e6ffed; color: #28a745; }
+.speak-btn:hover { background: #dcffe4; }
+
+.vocab-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+/* Definition is invisible by default */
+.word-meaning {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #34495e;
+    line-height: 1.4;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Show definition when hovering over the entire row */
+.vocab-item:hover .word-meaning {
+    opacity: 1;
+}
+
+/* Visual cue for the user */
+.vocab-item {
+    cursor: help;
+    align-items: flex-start;
+    min-height: 60px;
+}
+
+
+  
+        #card { width: 85%; height: 120px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; transition: transform 0.2s; padding: 20px; }
+        #card:hover { transform: scale(1.05); }
+        #display-text { font-size: 1.5rem; font-weight: bold; color: #333; }        
+        #card2 { width: 85%; height: 120px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; transition: transform 0.2s; padding: 20px; }
+        #card2:hover { transform: scale(1.05); }
+        #display-text2 { font-size: 1.5rem; font-weight: bold; color: #333; }
+
+        button:hover { background: #0056b3; }
+        /* Styles for the disabled state */
+button:disabled,
+button[disabled] { /* Using both for broader compatibility */
+  background-color: #cccccc; /* A grayed-out background */
+  color: #666666; /* A lighter text color */
+  cursor: not-allowed; /* Change the cursor icon */
+  opacity: 0.6; /* Faded appearance */
+  pointer-events: none; /* Prevents click events in non-button elements */
+}
+
+/* Ensure hover effects are disabled for the disabled button */
+button:disabled:hover {
+  /* Inherits the disabled styles, but can explicitly override if needed */
+  background-color: #cccccc;
+}
+
+ :root {
+        --primary-bg: lightgray;
+        --accent-color: #4f46e5;
+        --text-color: #e5e7eb;
+        --border-color: #374151;
+    }
+
+
+    /* Container for the select */
+    .select-group { display: flex; gap: 20px; margin-bottom: 20px; }
+
+    .custom-select-wrapper { position: relative; width: 150px; }
+
+    /* Main Select Styling */
+    select {
+        appearance: none; /* Removes default arrow */
+        width: 100%;
+        padding: 10px 15px;
+        background-color: var(--primary-bg);
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    select:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 8px rgba(79, 70, 229, 0.4);
+    }
+
+    /* Custom Arrow using ::after */
+    .custom-select-wrapper::after {
+        content: '▼';
+        font-size: 10px;
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: var(--accent-color);
+    }
+            h1 { border-bottom: 2px solid #8b0000; padding-bottom: 10px; color: #8b0000; }
+        .toc { background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+        .toc ul { list-style-type: decimal; }
+        .toc li { margin: 10px 0; }
+        .toc a { text-decoration: none; color: #2c3e50; font-weight: bold; }
+        .toc a:hover { color: #8b0000; text-decoration: underline; }
+        .content-section { margin-top: 100px; padding-bottom: 50px; border-bottom: 1px dashed #ccc; }
+        .back-to-top { display: block; margin-top: 20px; font-size: 0.9em; color: #666; text-decoration: none; }
+        .back-to-top:hover { color: #000; }
+    
+
+     
+/*        :root { --bg: #0f172a; --accent: #38bdf8; --card: #1e293b; --text: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 40px; display: flex; justify-content: center; }*/
+        .container { width: 100%; max-width: 900px; }
+        .card { background: var(--card); border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); }
+        .row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .row:last-child { border-bottom: none; }
+        
+        /* Interactive Button Style */
+        .play-toggle-btn {
+            width: 48px; height: 48px; background: var(--accent); border: none; border-radius: 14px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); flex-shrink: 0; margin-left: 15px;
+        }
+        .play-toggle-btn:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
+        .play-toggle-btn svg { width: 22px; height: 22px; fill: #0f172a; }
+
+        /* State Classes */
+        .is-speaking { background: #ef4444 !important; } /* Change to red when speaking */
+        .modal {
+  display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+  width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+  background-color: #fff; margin: 10% auto; padding: 20px;
+  border-radius: 8px; width: 50%; position: relative;
+}
+#bulkInput { width: 90%; height: 200px; margin: 10px 0; padding: 10px; }
+.close { position: absolute; right: 15px; top: 10px; cursor: pointer; font-size: 24px; }
+#storytext { width: 90%; height: 200px; margin: 10px 0; padding: 10px; }
+.close { position: absolute; right: 15px; top: 10px; cursor: pointer; font-size: 24px; }
+
+#words {
+  line-height: 1.6;
+  font-family: sans-serif;
+  color: #333;
+}
+
+.highlighted-vocab {
+  background-color: #fff3bf; /* Soft yellow */
+  border-bottom: 2px solid #fab005;
+  font-weight: bold;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+.button-row {
+  display: flex;
+ 
+  gap: 30px;
+  
+
+ 
+}
+
+.add-btn2 {
+  /* Dimensions for text clearance */
+  min-width: 180px;
+  padding: 15px 30px;
+  border-radius: 50px; /* Round/Pill shape */
+  
+  /* Lighter Cyber Colors */
+  background: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+  color: #0088cc; /* Soft electric blue */
+  border: 2px solid #00d4ff;
+  
+  /* Modern Typography */
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 600;
+  text-transform: lowercase;
+  letter-spacing: 0.5px;
+  
+  /* Subtle Cyber Glow */
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+}
+
+/* Hover Effect: Soft Pulse & Color Shift */
+.add-btn2:hover {
+  background: #ffffff;
+  color: #00d4ff;
+  border-color: #00d4ff;
+  box-shadow: 0 0 25px rgba(0, 212, 255, 0.4), 0 0 50px rgba(0, 212, 255, 0.1);
+  transform: scale(1.05);
+}
+
+/* Active/Click State */
+.add-btn2:active {
+  transform: scale(0.98);
+  box-shadow: inset 0 2px 10px rgba(0, 212, 255, 0.2);
+}
+@import url('https://fonts.googleapis.com');
+
+:root {
+  --book-width: 100px;
+  --book-height: 150px;
+  --book-depth: 25px; /* Thickness of the book */
+}
+
+.shelf-container {
+  background-color: #fcfaf5; /* Very light parchment */
+  padding: 60px 20px;
+  max-width: 600px; /* Narrow shelf */
+    margin: 0;                /* Removes the auto-centering */
+  text-align: left; 
+  border-bottom: 8px solid #e0d8c3; /* The "shelf" edge */
+}
+
+.antique-row {
+  display: flex;
+  justify-content: flex-start; /* Aligns the books to the start (left) */
+  gap: 40px;
+  perspective: 1200px;* Crucial for 3D */
+}
+
+.book-3d {
+  position: relative;
+  width: var(--book-width);
+  height: var(--book-height);
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  text-decoration: none;
+}
+
+/* Creating the "Depth" (the pages) */
+.book-side {
+  position: absolute;
+  top: 5px;
+  right: 0;
+  width: var(--book-depth);
+  height: calc(var(--book-height) - 10px);
+  background: #fffef0; /* Page color */
+  background-image: linear-gradient(90deg, #e8e4d8 1px, transparent 1px);
+  background-size: 3px 100%; /* Vertical lines to look like pages */
+  transform: rotateY(90deg) translateZ(calc(var(--book-width) / 2));
+  box-shadow: inset 5px 0 10px rgba(0,0,0,0.1);
+}
+
+.book-cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #5d1a1a;
+  border-radius: 2px 5px 5px 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateZ(calc(var(--book-depth) / 2));
+  box-shadow: 
+    1px 1px 1px rgba(255,255,255,0.2) inset,
+    5px 10px 20px rgba(0,0,0,0.15); /* Soft shadow on light bg */
+}
+
+.leather-red { background: #7d2626; }
+.leather-blue { background: #263d5d; }
+
+.gold-emboss {
+  position: absolute;
+  top: 8px; bottom: 8px; left: 8px; right: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  pointer-events: none;
+}
+
+.text-layer {
+  text-align: center;
+  color: #d4af37;
+  font-family: 'Cinzel', serif;
+  padding: 10px;
+}
+
+.text-layer h3 { font-size: 0.8rem; margin: 0; text-transform: uppercase; }
+.text-layer p { font-size: 0.6rem; margin: 5px 0 0; opacity: 0.8; }
+
+/* 3D Animation on Hover */
+.book-3d:hover {
+  transform: rotateY(-30deg) rotateX(5deg) translateX(10px);
+}
+.modal-content {
+  max-height: 80vh;    /* Prevents the modal from being taller than the screen */
+  overflow-y: auto;    /* Adds a vertical scrollbar when content exceeds max-height */
+  
+  margin: 5% auto;   /* Centers the modal vertically and horizontally */
+  padding: 20px;
+  /* Keep your existing styles (width, background, etc.) here */
+}
+
+/* Optional: Ensure the textarea doesn't break the layout */
+#storytext {
+  width: 100%;
+  min-height: 200px;
+  resize: vertical;    /* Allows user to resize height only */
+}
+
+    </style>
+
+
+
+    <div class="tab-bar">
+        <div class="tab active" onclick="openPage(event, 'vocabulary')">Vocabulary</div>
+        <div class="tab" onclick="openPage(event, 'writing')">Writing</div>
+        <div class="tab" onclick="openPage(event, 'chinese')">中文</div>
+    </div>
+
+    <!-- VOCABULARY PAGE -->
+
+
+
+    <!-- ... Tab Bar ... -->
+
+<div id="vocabulary" class="page active">
+
+
+<br><br>
+
+<div class="shelf-container">
+  <div class="antique-row">
+    <!-- Book 1 -->
+    <a href="https://www.youtube.com/watch?v=yl--RTTtKLs&list=PLA5UIoabheFM281dIr4ojw9xOVoo9dOtw" class="book-3d" target="_blank" rel="noopener noreferrer">
+      <div class="book-side"></div> <!-- The "pages" side -->
+      <div class="book-cover leather-red">
+        <div class="gold-emboss"></div>
+        <div class="text-layer">
+          <h2>Easy English</h2>
+          
+        </div>
+      </div>
+    </a>
+
+    <!-- Book 2 -->
+    <a href="https://www.youtube.com/watch?v=Z-ga04ESLKs&t=1306s" class="book-3d" target="_blank" rel="noopener noreferrer">
+      <div class="book-side"></div>
+      <div class="book-cover leather-blue">
+        <div class="gold-emboss"></div>
+        <div class="text-layer">
+          <h3>Sherlock Holmes</h3>
+          
+        </div>
+      </div>
+    </a>  
+      <a href="https://www.youtube.com/watch?v=6XIPkMFZf-0" class="book-3d" target="_blank" rel="noopener noreferrer">
+      <div class="book-side"></div>
+      <div class="book-cover leather-Red">
+        <div class="gold-emboss"></div>
+        <div class="text-layer">
+          <h3>Harry Portter</h3>
+         
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+<br><br><br>
+   
+    <!-- Main Carousel Component -->
+
+
+        
+      
+            <!-- Cards generated by JS -->
+
+    
+
+    <div id='test'>
+        <div class="button-row">
+ <button class="add-btn2" onclick="openModal('test1')">Vocabs</button><br> 
+ <button class="add-btn2" onclick="openModal('test2')">Definitions</button><br> 
+<button class="add-btn2" onclick="displayWords();openModal('storyModal')">story/essay</button>
+</div> <br>
+ <div id="test1" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('test1')">&times;</span>
+	 <div id="card">
+        <span id="display-text">Give me a Vocab!</span>
+    </div>
+    <button id='start' onclick="startWord()">Start</button>
+    <button id='next' onclick="nextWord()">Next</button>  
+    </div>        
+    </div>  
+    <br>
+ <div id="test2" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('test2')">&times;</span>
+     <div id="card2">
+     <span id="display-text2">Give me a Definition!</span>
+    </div>
+    <button id='start2' onclick="startWord2()">Start</button>
+    <button id='next2' onclick="nextWord2()">Next</button>
+  </div>
+</div></div>
+
+	
+   <br>
+<div>
+    
+    <!-- Trigger Button -->
+
+
+</div>
+ 
+
+<!-- The Modal -->
+<div id="vocabModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('vocabModal')">&times;</span>
+    <h3>Add New Vocabularies</h3>
+    <p>Enter word and definition separated by a dash (e.g., Apple : A red fruit), one per line.</p>
+    <textarea id="bulkInput" placeholder="Word: Definition"></textarea>
+    <button onclick="processBulkAdd()">Save All</button>
+  </div>
+</div>
+
+<div id="storyModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('storyModal')">&times;</span>
+    <h3>Study by Story/Essay</h3>
+
+    <p id='words'></p>
+    <textarea id="storytext" placeholder="place the story here"></textarea>
+    <button id='formatBtn' onclick="formatStory()">Format</button>
+    <button id='storyvoice' onclick="speak('storytext')">speak</button>
+    <!-- <button onclick="speak('storytext')">Read Aloud</button> -->
+
+  </div>
+</div>
+
+ <div class="select-group">
+    <div class="custom-select-wrapper">
+        <select id="startIdx"></select>
+    </div>
+    <div class="custom-select-wrapper">
+        <select id="endIdx"></select>
+    </div>
+    <button class="add-btn" onclick="openModal('vocabModal')">➕ Add Vocab</button>
+<button class="add-btn" onclick="download('vocabContainer')">download</button><br>
+</div>
+    <div id="vocabContainer"></div>
+     <br><br><br><br><br><br>
+    
+</div>
+    
+
+
+    <!-- Load the external data first -->
+<!--     <script src="vocab.js"></script> -->
+<script >
+    	    // Load data from localStorage or default to empty array
+let vocabList = JSON.parse(localStorage.getItem('vocabData')) || [];
+document.getElementById('storytext').innerHTML=JSON.parse(localStorage.getItem('storyArea')) || [];
+function loadVocab() {
+    const container = document.getElementById('vocabContainer');
+    container.innerHTML = '';
+     
+    vocabList.forEach((item,index) => {
+        const div = document.createElement('div');
+        div.className = 'vocab-item';
+    
+        
+        // Calculate row number: index 0 becomes #1
+        const rowNum = index + 1;
+
+        div.innerHTML = `
+            <div class="vocab-info">
+                <span class="row-num">#${rowNum}</span>
+                <strong onclick="openYouGlish('${item.word}')" title="See on YouGlish">${item.word}</strong>
+                <span class="definition">— ${item.definition}</span>
+            </div>
+            <div class="actions">
+                <button class="action-btn img-btn" onclick="openImageSearch('${item.word}')">🖼️</button>
+                <button class="action-btn speak-btn" onclick="speak('${item.word}')">🔊</button>
+                <button class="action-btn edit-btn" onclick="editVocab('${item.id}')">✏️</button>
+                <button class="action-btn delete-btn" onclick="deleteVocab('${item.id}')">🗑️</button>
+            </div>
+        `;
+
+        container.appendChild(div);
+    });
+}
+// Initial render
+loadVocab();
+
+    </script>
+    <!-- droplist -->
+    <!-- Include html2pdf.js via CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+   <script>
+   	    const startSelect = document.getElementById('startIdx');
+        const endSelect = document.getElementById('endIdx');
+      
+
+       
+        // 1. Populate dropdowns with indices
+        function dropdown(){
+            startSelect.innerHTML='';
+            endSelect.innerHTML='';
+
+        vocabList.forEach((_, index) => {
+            startSelect.innerHTML += `<option value="${index}">${index}</option>`;
+            // End index is inclusive of the last element, so we add options up to length
+            endSelect.innerHTML += `<option value="${index + 1}">${index + 1}</option>`;
+        });
+
+        // Set default values
+        startSelect.value = 0;
+        endSelect.value = vocabList.length;
+                // Set default values
+      };
+
+      dropdown();
+        // 2. Truncation Function
+        function updateDisplay() {
+        	//vocabList = vocab;
+
+            const start = parseInt(startSelect.value);
+            const end = parseInt(endSelect.value);
+
+            // Use slice to truncate without modifying the original array
+            vocabList = vocabList.slice(start, end);
+            loadVocab();
+           
+        }
+
+        // 3. Listen for changes
+        startSelect.addEventListener('change', updateDisplay);
+        endSelect.addEventListener('change', updateDisplay);
+function downloadTxt() {
+  const textContent = vocabList.map(i => `${i.word}: ${i.definition}`).join('\n');
+  const blob = new Blob([textContent], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = "vocab-list.txt";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+ function downloadPDF(id) {
+  const element = document.getElementById(id);
+  const options = {
+    margin:       1,
+    filename:     'my-document.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+
+  // Generate and save the PDF
+  html2pdf().set(options).from(element).save();
+}
+function download(id){
+   downloadTxt();
+   downloadPDF(id);
+}
+let wordsOnly = JSON.parse(localStorage.getItem('vocabData')) || [];;
+function displayWords() {
+  // Extract just the 'word' property from each object
+  wordsOnly = vocabList.map(item => item.word);
+   localStorage.setItem('wordsOnly', JSON.stringify(wordsOnly));
+  // Join them with a comma and space, then update the HTML
+  document.getElementById('words').textContent 
+             ='Write a short story/essay includes all the following vocabs: '+ wordsOnly.join(', ')+' in simple english.';
+}
+
+
+// 1. Target the paragraph and the container where the button will go
+const textElement = document.getElementById('words');
+
+// 2. Create the button element
+const copyBtn = document.createElement('button');
+copyBtn.innerText = 'Copy Text';
+
+// 3. Add the click event listener
+copyBtn.addEventListener('click', async () => {
+    try {
+        // Get the text content from the <p> tag
+        const textToCopy = textElement.innerText;
+        
+        // Use the Clipboard API to copy it
+        await navigator.clipboard.writeText(textToCopy);
+        
+        // Optional: Provide user feedback
+        copyBtn.innerText = 'Copied! ✅';
+        setTimeout(() => { copyBtn.innerText = 'Copy Text'; }, 2000);
+    } catch (err) {
+        console.error('Failed to copy: ', err);
+    }
+});
+
+// 4. Append the button to the document (e.g., after the paragraph)
+textElement.after(copyBtn);
+ document.getElementById('storyvoice').disabled=true;
+function formatStory() {
+  const textarea = document.getElementById('storytext');
+  const output = document.getElementById('words');
+ // Your vocabulary array
+
+  // 1. Sanitize and handle line breaks
+  let text = textarea.value
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\n/g, '<br>');
+
+  localStorage.setItem('storyArea', JSON.stringify(text));
+
+  // 2. Highlight words using a span with a CSS class
+  wordsOnly.forEach(word => {
+    // \b ensures we match whole words only; 'gi' is global and case-insensitive
+    const regex = new RegExp(`\\b(${word})\\b`, 'gi');
+    text = text.replace(regex, '<span class="highlighted-vocab">$1</span>');
+  });
+
+  output.innerHTML = text;
+
+  document.getElementById('storytext').style.display='none';
+   document.getElementById('formatBtn').disabled=true;
+   document.getElementById('storyvoice').disabled=false;
+
+}
+   </script>
+
+    <script>
+	function openModal(id) {
+    document.getElementById(id).style.display = 'block';
+
+}
+
+function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+      document.getElementById('storytext').style.display='block';
+   document.getElementById('formatBtn').disabled=false;
+   document.getElementById('storyvoice').disabled=true;
+
+   window.speechSynthesis.cancel();
+}
+
+
+
+
+    saveAndRefresh(); // Saves to LocalStorage and updates UI
+    document.getElementById('bulkInput').value = ''; // Clear input
+    closeModal('vocabModal');
+
+function processBulkAdd() {
+    const input = document.getElementById('bulkInput').value;
+    const lines = input.split('\n').filter(line => line.trim() !== "");
+
+    // Reverse lines before unshifting so the first line typed 
+    // ends up being the very first item in the list
+    lines.reverse().forEach(line => {
+        const [word, definition] = line.split(':');
+        if (word && definition) {
+            vocabList.unshift({ // <--- Changed from .push()
+                id: Date.now().toString() + Math.random(), 
+                word: word.trim(), 
+                definition: definition.trim() 
+            });
+        }
+    });
+
+    saveAndRefresh();
+    document.getElementById('bulkInput').value = ''; 
+    closeModal('vocabModal');
+}
+        // Function to render the list from vocab.js
+
+function saveAndRefresh() {
+    // Convert array to string and store
+    localStorage.setItem('vocabData', JSON.stringify(vocabList));
+
+    loadVocab(); // Your existing function to display the list
+    dropdown();
+   
+}
+
+function editVocab(id) {
+    const item = vocabList.find(i => i.id === id);
+    const newWord = prompt("Edit word:", item.word);
+    const newDef = prompt("Edit definition:", item.definition);
+
+    if (newWord && newDef) {
+        item.word = newWord;
+        item.definition = newDef;
+        saveAndRefresh();
+    }
+}
+
+ // CREATE: Example helper to add new items
+function addVocab(word, definition) {
+    const newItem = {
+        id: Date.now().toString(),
+        word: word,
+        definition: definition
+    };
+    vocabList.unshift(newItem); // <--- Add to the start of the array
+    saveAndRefresh();
+}
+
+
+function deleteVocab(id) {
+    if (confirm("Delete this word?")) {
+        vocabList = vocabList.filter(item => item.id !== id);
+        saveAndRefresh();
+
+
+    }
+}
+
+
+
+
+
+// ... keep openYouGlish, openImageSearch, and speak functions from previous step ...
+
+
+function openYouGlish(word) {
+    const url = 'https://youglish.com/pronounce/'+word+'/english';
+    window.open(url, '_blank');
+}
+
+function openImageSearch(word) {
+    const url = 'https://www.google.com/search?udm=2&q='+word;
+    window.open(url, '_blank');
+}
+
+// Keep the existing speak function...
+         
+        // Speech Synthesis Function
+        function speak(text) {
+            let txt=text;
+
+            if(text=='storytext') text = document.getElementById("storytext").value;
+
+                              
+            
+
+            
+
+            
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // Auto-detect language: if text contains Chinese characters, use Chinese voice
+            if (/[\u4E00-\u9FA5]/.test(text)) {
+                utterance.lang = 'zh-HK';
+            } else {
+                utterance.lang = 'en-US';
+            }
+
+            
+            if(txt=='storytext'&&document.getElementById('storyvoice').textContent=='speak'){
+              document.getElementById('storyvoice').innerHTML='stop';
+               window.speechSynthesis.speak(utterance);
+            }else if(txt=='storytext'&&document.getElementById('storyvoice').textContent=='stop'){
+
+              window.speechSynthesis.cancel();
+              document.getElementById('storyvoice').innerHTML='speak';
+            }else window.speechSynthesis.speak(utterance);
+           
+        }
+
+        // Initialize
+        window.onload = loadVocab;
+
+        // ... existing openPage function ...
+    </script>
+    <script>
+ 
+        let currentVocab = null;
+        let currentVocab2 = null;
+        const card = document.getElementById('card');
+        const text = document.getElementById('display-text');        
+        const card2 = document.getElementById('card2');
+        const text2 = document.getElementById('display-text2');
+        document.getElementById("next").disabled = true;
+        document.getElementById("next2").disabled = true;
+       
+        
+       let n = '';
+       let n2='';
+       let consecutiveArray = '';
+       let consecutiveArray2 = '';
+       let i =0; let start=false;
+       let i2 =0; let start2=false;
+       function startWord(){
+            start = true;
+            n = vocabList.length;
+            consecutiveArray = Array.from({ length: n }, (_, index) => index);
+            shuffleArray(consecutiveArray);
+            currentVocab = vocabList[consecutiveArray[i++]];
+            text.innerText = currentVocab.word;
+             document.getElementById("next").disabled = false;
+              document.getElementById("start").disabled = true;
+            
+       }
+       function nextWord() {
+            if(i<n&&start){
+            currentVocab = vocabList[consecutiveArray[i++]];
+            text.innerText = currentVocab.word;
+           }else{
+           	start = false;
+           	text.innerText = 'Well Done';
+           	 document.getElementById("start").disabled = false;
+           	  document.getElementById("next").disabled = true;
+         
+           	  shuffleArray(consecutiveArray);
+           	  i=0;
+           }
+
+        }
+        function startWord2(){
+            start2 = true;
+            n2 = vocabList.length;
+            consecutiveArray2 = Array.from({ length: n2 }, (_, index) => index);
+            shuffleArray(consecutiveArray2);
+            currentVocab2 = vocabList[consecutiveArray2[i2++]];
+            text2.innerText = currentVocab2.definition;
+             document.getElementById("next2").disabled = false;
+              document.getElementById("start2").disabled = true;
+            
+       }
+       function nextWord2() {
+            if(i2<n2&&start2){
+            currentVocab2 = vocabList[consecutiveArray2[i2++]];
+            text2.innerText = currentVocab2.definition;
+           }else{
+            start2 = false;
+            text2.innerText = 'Well Done';
+             document.getElementById("start2").disabled = false;
+              document.getElementById("next2").disabled = true;
+         
+              shuffleArray(consecutiveArray2);
+              i2=0;
+           }
+
+        }
+
+       card.onmouseover = () => { if(currentVocab&&start) text.innerText = currentVocab.definition; };
+        card.onmouseout = () => { if(currentVocab&&start) text.innerText = currentVocab.word; };
+        card2.onmouseover = () => { if(currentVocab2&&start2) text2.innerText = currentVocab2.word; };
+        card2.onmouseout = () => { if(currentVocab2&&start2) text2.innerText = currentVocab2.definition; };
+        
+
+      function shuffleArray(array) {
+    let currentIndex = array.length, randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex !== 0) {
+
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+}
+
+
+
+
+
+    </script>
+
+
+    <!-- WRITING PAGE -->
+    <div id="writing" class="page">
+
+    <p>
+Evolving: Developing gradually / 正在發展的；演變中的<br>
+Inclination: A feeling that makes you want to do something / 傾向；意向<br>
+Paradigms: A typical example or pattern of something / 範式；典範<br>
+Cross-section: A representative sample of a group / 典型代表；橫截面<br>
+Cohort: A group of people with a shared characteristic / （有共同特點的）一群人<br>
+Financial stability: The state of being financially secure / 財務穩健<br>
+Sustaining: Maintaining or keeping something going / 維持；供養<br>
+Compelled: Forced to do something / 被迫；不得不<br>
+Amass: To collect or build up a large amount of something / 積聚；積累<br>
+Frugally: In a way that uses very little money / 節儉地<br>
+Camaraderie: Mutual trust and friendship among people / 同僚之情；友情<br>
+Derive: To get something from a specific source / 從…中獲得<br>
+Accomplishment: Something that has been achieved successfully / 成就；完成<br>
+Pivotal: Of crucial importance / 關鍵的；核心的<br>
+Constrained: Restricted or limited / 受限制的；束縛的<br>
+Unveils: To show or reveal something for the first time / 揭露；顯示<br>
+Starkly: In a very obvious or contrasting way / 明顯地；截然地<br>
+Encompasses: To include or cover a large range / 包含；包括<br>
+Paramount: More important than anything else / 至高無上的；最重要的<br>
+Heed: To pay attention to advice or a warning / 留心；注意<br></p>
+ <br><br>
+ <p>3, study passage with translation <a href="https://www.naturalreaders.com/online/">@naturalreader</a></p>
+<p>
+Contrasting Perspectives on Retirement in Hong Kong .<br>
+香港退休觀念的對比視角。<br>
+
+In a rapidly evolving social landscape, the way individuals perceive retirement has taken center stage, as a recent survey unveils starkly contrasting views between different generations.<br>
+在一個急速變遷的社會環境中，個人如何看待退休已成為焦點，一項近期調查揭示了不同世代之間截然不同的觀點。<br>
+
+While the majority of people in their 60s express an inclination to extend their working lives beyond the traditional retirement age of 65, a noteworthy surge in young people aiming to retire in their 30s or 40s highlights the shifting paradigms surrounding retirement.<br>
+雖然大多數六十多歲的人士表示傾向於將工作生涯延長至傳統的六十五歲退休年齡之後，但值得關注的是，目標在三十多或四十多歲退休的年輕人數目顯著上升，突顯了圍繞退休的觀念範式正在轉變。<br>
+
+The survey conducted by the Financial Planning Research Group, involving a diverse cross-section of Hong Kong’s population, brings to light the complex attitudes towards retirement.<br>
+由財務策劃研究組進行的這項調查，涵蓋了香港社會各階層人士，揭示了對退休的複雜態度。<br>
+
+According to the findings, more than 70% of respondents in their 60s expressed a desire to continue working past the age of 65.<br>
+調查結果顯示，超過七成六十多歲的受訪者表示希望在六十五歲後繼續工作。<br>
+
+At the top of their list of priorities is financial stability.<br>
+他們優先考慮清單上首位是財務穩定。<br>
+
+As the first cohort to navigate through major economic events such as the financial crisis in 1997, the SARS outbreak in 2003, the financial tsunami in 2008 and the global pandemic in 2019, they recognize the vital role continued employment plays in sustaining their quality of life.<br>
+作為首批經歷了1997年金融危機、2003年沙士爆發、2008年金融海嘯及2019年全球疫情等重大經濟事件的一代，他們認識到持續就業對於維持生活質素起著至關重要的作用。<br>
+
+Over the past few decades, economic uncertainty and the relentless rise in the cost of living have compelled them to remain engaged in the workforce.<br>
+過去幾十年，經濟的不確定性及生活成本的不斷上升，迫使他們必須保持參與勞動力市場。<br>
+
+Accordingly, they perceive working as the best way to ensure their ability to afford the necessities and even the luxuries in their later years.<br>
+因此，他們視工作為確保晚年有能力負擔生活必需品甚至奢侈品的最佳方式。<br>
+
+Another factor that fuels the desire of this generation to keep working is the sense of purpose that employment provides.<br>
+驅使這一代人希望繼續工作的另一個因素，是工作所提供的意義感。<br>
+
+Work is not just about earning a paycheck; it encompasses a sense of identity, routine and social interaction.<br>
+工作不僅僅是為了賺取薪金；它還包含身份認同感、生活規律和社交互動。<br>
+
+The daily routines they've built over the years, the camaraderie they've formed with their co-workers and the meaningful tasks they perform in their jobs all come together to give them a sense of purpose.<br>
+他們多年來建立的日常規律、與同事建立的友誼，以及工作中所執行的有意義任務，共同賦予他們一種目標感。<br>
+
+Many older individuals actually derive fulfillment from their professional roles and find purpose in their contributions to their fields.<br>
+許多年長者實際上從他們的專業角色中獲得滿足感，並在對其所屬領域的貢獻中找到人生意義。<br>
+
+Retirement, for them, could signify missing out on these things – the mental challenges, the chance to talk to friends at work and the sense of accomplishment.<br>
+對他們而言，退休可能意味著錯失這些東西——心智上的挑戰、與工作朋友交談的機會，以及成就感。<br>
+
+In stark contrast to the older generation’s perspectives, the younger demographic is redefining their views on retirement.<br>
+與老一輩的觀點形成鮮明對比的是，年輕一代正在重新定義他們對退休的看法。<br>
+
+Under the influence of the FIRE (Financial Independence, Retire Early) movement, these millennials are driven to embrace an entirely different approach to work and financial strategizing.<br>
+在財務自主，提早退休（FIRE）運動的影響下，這些千禧一代被驅使去接納一種完全不同的工作和財務策略方式。<br>
+
+Central to this movement is the principle of financial independence, which encourages people to save aggressively, invest wisely from a young age and live frugally to amass enough wealth to retire decades ahead of the traditional age.<br>
+此運動的核心原則是財務獨立，鼓勵人們積極儲蓄、從小明智投資並節儉生活，以積累足夠財富，比傳統退休年齡提前數十年退休。<br>
+
+With some luck, retiring in one’s 30s or 40s is no longer an unachievable dream.<br>
+若有些許運氣，在三十多或四十多歲退休已不再是無法實現的夢想。<br>
+
+Moreover, the pursuit of passions plays a pivotal role in the aspirations of the young generation towards early retirement.<br>
+此外，對熱情的追求在年輕一代嚮往提早退休的願望中扮演關鍵角色。<br>
+
+The desire to explore personal interests, travel and immerse themselves in life experiences outside work further motivates them to achieve financial independence as early as possible.<br>
+探索個人興趣、旅行以及投入工作以外生活體驗的渴望，進一步激勵他們盡早實現財務獨立。<br>
+
+For them, retirement means a newfound freedom to pursue their dreams and aspirations without being constrained by the demands of traditional employment which, more often than not, confines a worker to an office cubicle for as long as 10 hours from Monday to Friday.<br>
+對他們來說，退休意味著一種新獲得的自由，可以追求夢想和抱負，而不受傳統僱傭要求的束縛——這些要求往往將工作者困在辦公室格子間裡，每週一至週五長達十小時。<br>
+
+Once they have accumulated enough money to support themselves, they simply want to live life on their terms and create meaningful memories outside of their regular jobs.<br>
+一旦積累了足夠資金維生，他們便只想按照自己的方式生活，並在常規工作之外創造有意義的回憶。<br>
+
+As Hong Kong adapts to the progressively diverging views on retirement, it becomes paramount to foster open dialogues between the older and younger generations.<br>
+隨著香港適應日益分歧的退休觀念，促進老一輩與年輕一代之間的開放對話變得至關重要。<br>
+
+Policymakers should heed these differing desires in an aim to create flexible retirement plans that cater to both seniors seeking meaningful employment and young enthusiasts striving for early independence.<br>
+政策制定者應重視這些不同的願望，旨在制定靈活的退休計劃，以同時滿足尋求有意義工作的年長者，以及爭取提早獨立的年輕熱衷者。<br>
+</p>
+<br>
+<p>4, study passage <a href="https://www.naturalreaders.com/online/">@naturalreader</a></p>
+    <p>
+    	<h4>Contrasting Perspectives on Retirement in Hong Kong</h4>
+
+
+In a rapidly evolving social landscape, the way individuals perceive retirement has taken center stage, as a recent survey unveils starkly contrasting views between different generations. While the majority of people in their 60s express an inclination to extend their working lives beyond the traditional retirement age of 65, a noteworthy surge in young people aiming to retire in their 30s or 40s highlights the shifting paradigms surrounding retirement.<br>
+
+
+The survey conducted by the Financial Planning Research Group, involving a diverse cross-section of Hong Kong’s population, brings to light the complex attitudes towards retirement. According to the findings, more than 70% of respondents in their 60s expressed a desire to continue working past the age of 65. At the top of their list of priorities is financial stability. As the first cohort to navigate through major economic events such as the financial crisis in 1997, the SARS outbreak in 2003, the financial tsunami in 2008 and the global pandemic in 2019, they recognize the vital role continued employment plays in sustaining their quality of life. Over the past few decades, economic uncertainty and the relentless rise in the cost of living have compelled them to remain engaged in the workforce. Accordingly, they perceive working as the best way to ensure their ability to afford the necessities and even the luxuries in their later years.<br>
+
+
+Another factor that fuels the desire of this generation to keep working is the sense of purpose that employment provides. Work is not just about earning a paycheck; it encompasses a sense of identity, routine and social interaction. The daily routines they've built over the years, the camaraderie they've formed with their co-workers and the meaningful tasks they perform in their jobs all come together to give them a sense of purpose. Many older individuals actually derive fulfillment from their professional roles and find purpose in their contributions to their fields. Retirement, for them, could signify missing out on these things – the mental challenges, the chance to talk to friends at work and the sense of accomplishment. <br>
+
+
+In stark contrast to the older generation’s perspectives, the younger demographic is redefining their views on retirement. Under the influence of the FIRE (Financial Independence, Retire Early) movement, these millennials are driven to embrace an entirely different approach to work and financial strategizing. Central to this movement is the principle of financial independence, which encourages people to save aggressively, invest wisely from a young age and live frugally to amass enough wealth to retire decades ahead of the traditional age. With some luck, retiring in one’s 30s or 40s is no longer an unachievable dream.
+<br>
+
+Moreover, the pursuit of passions plays a pivotal role in the aspirations of the young generation towards early retirement. The desire to explore personal interests, travel and immerse themselves in life experiences outside work further motivates them to achieve financial independence as early as possible. For them, retirement means a newfound freedom to pursue their dreams and aspirations without being constrained by the demands of traditional employment which, more often than not, confines a worker to an office cubicle for as long as 10 hours from Monday to Friday. Once they have accumulated enough money to support themselves, they simply want to live life on their terms and create meaningful memories outside of their regular jobs.
+<br>
+
+As Hong Kong adapts to the progressively diverging views on retirement, it becomes paramount to foster open dialogues between the older and younger generations. Policymakers should heed these differing desires in an aim to create flexible retirement plans that cater to both seniors seeking meaningful employment and young enthusiasts striving for early independence.
+<br>
+
+    </p>
+    
+     <br><br><br><br><br><br>
+
+    </div>
+    
+    <!-- CHINESE PAGE -->
+    <div id="chinese" class="page">
+    
+
+    <h1 id='Chinese'>目錄</h1>
+
+    <div  class="toc">
+        <ul>
+            <li><a href="#cat1">孟子《魚我所欲也》</a></li>
+            <li><a href="#cat2">荀子《勸學》</a></li>
+            <li><a href="#cat3">莊子《逍遙遊》</a></li>
+            <li><a href="#cat4">韓愈《師說》</a></li>
+            <li><a href="#cat5">論語：《論仁、論孝、論君子》</a></li>
+            <li><a href="#cat6">司馬遷《廉頗藺相如列傳》</a></li>
+            <li><a href="#cat7">蘇洵《六國論》</a></li>
+            <li><a href="#cat8">范仲淹《岳陽樓記》</a></li>
+            <li><a href="#cat9">柳宗元《始得西山宴遊記》</a></li>
+            <li><a href="#cat10">諸葛亮《出師表》</a></li>
+            <li><a href="#cat11">唐詩三首</a></li>
+            <li><a href="#cat12">詞三首</a></li>
+        </ul>
+    </div>
+
+    <div id="cat1" class="content-section">
+        <h2>孟子《魚我所欲也》</h2>
+        <p>（在此輸入正文內容...）</p>
+        <div class="container" id="mengzi1"></div>
+        <div class="container" id="mengzi2"></div>
+        <div class="container" id="mengzi3"></div>
+        <a href="#Chinese" class="back-to-top">↑ 返回目錄</a>
+    </div>
+
+    <div id="cat2" class="content-section">
+        <h2>荀子《勸學》</h2>
+        <p>（在此輸入正文內容...）</p>
+        <a href="#Chinese" class="back-to-top">↑ 返回目錄</a>
+    </div>
+
+    <div id="cat3" class="content-section">
+        <h2>莊子《逍遙遊》</h2>
+        <p>（在此輸入正文內容...）</p>
+        <a href="#Chinese" class="back-to-top">↑ 返回目錄</a>
+    </div>
+
+    <div id="cat4" class="content-section">
+        <h2>韓愈《師說》</h2>
+
+<h4>原文</h4>
+<div class="container" id="shishuo1"></div>
+<h4>解讀</h4>
+<div class="container" id="shishuo2"></div>
+<div class="container" id="shishuo3"></div>
+
+
+        <a href="#Chinese" class="back-to-top">↑ 返回目錄</a>
+    
+    </div>
+
+    <div id="cat5" class="content-section">
+        <h2>《論語》：《論仁、論孝、論君子》</h2>
+        <p>（在此輸入正文內容...）</p>
+        <a href="#Chinese" class="back-to-top">↑ 返回目錄</a>
+    </div>
+
+    <div id="cat6" class="content-section">
+        <h2>司馬遷《廉頗藺相如列傳》</h2>
+        <p>（在此輸入正文內容...）</p>
+        <a href="#Chinese" class="back-to-top">↑ 返回目錄</a>
+    </div>
+
+    <div id="cat7" class="content-section">
+        <h2>蘇洵《六國論》</h2>
+        <p>（在此輸入正文內容...）</p>
+        <a href="#Chinese" class="back-to-top">↑ 返回目錄</a>
+    </div>
+
+    <div id="cat8" class="content-section">
+        <h2>范仲淹《岳陽樓記》</h2>
+        <p>（在此輸入正文內容...）</p>
+        <a href="#Chinese" class="back-to-top">↑ 返回目錄</a>
+    </div>
+
+    <div id="cat9" class="content-section">
+        <h2>柳宗元《始得西山宴遊記》</h2>
+        <p>（在此輸入正文內容...）</p>
+        <a href="#Chinese" class="back-to-top">↑ 返回目錄</a>
+    </div>
+
+    <div id="cat10" class="content-section">
+        <h2>諸葛亮《出師表》</h2>
+        <p>（在此輸入正文內容...）</p>
+        <a href="#Chinese" class="back-to-top">↑ 返回目錄</a>
+    </div>
+
+    <div id="cat11" class="content-section">
+        <h2>唐詩三首</h2>
+        <ul>
+            <li>王維《山居秋暝》</li>
+            <li>李白《月下獨酌》(其一)</li>
+            <li>杜甫《登樓》</li>
+        </ul>
+        <a href="#Chinese" class="back-to-top">↑ 返回目錄</a>
+    </div>
+
+    <div id="cat12" class="content-section">
+        <h2>詞三首</h2>
+        <ul>
+            <li>蘇軾《念奴嬌-赤壁懷古》</li>
+            <li>李清照《聲聲慢-秋情》</li>
+            <li>辛棄疾《青玉案．元夕》</li>
+        </ul>
+        <a href="#Chinese" class="back-to-top">↑ 返回目錄</a>
+    </div>
+
+<script>
+     const mengzi1=["孟子曰︰魚，我所欲也，熊掌 ，亦我所欲也；二者不可得兼，舍魚而取熊掌者也。生亦我所欲也，義亦我所欲也；二者不可得兼，舍生而取義者也。/生亦我所欲，所欲有甚於生者，故不為苟得也；死亦我所惡，所惡有甚於死者，故患有所不辟也。 /如使人之所欲莫甚於生，則凡可以得生者，何不用也？/使人之所惡莫甚於死者，則凡可以辟患者，何不為也？由是則生而有不用也，由是則可以辟患而有不為也，是故所欲有甚於生者，所惡有甚於死者。非獨賢者有是心也，人皆有之，賢者能勿喪耳。/一簞食，一豆羹，得之則生，弗得則死 。嘑爾而與之,行道之人弗受；蹴爾而與之，乞人不屑也；/萬鍾則不辯禮義而受之。萬鍾於我何加焉？/為宮室之美、妻妾之奉、所識窮乏者得我與？/鄉為身死而不受，今為宮室之美為之；鄉為身死而不受，今為妻妾之奉為之；鄉為身死而不受，今為所識窮乏者得我而為之，是亦不可以已乎？此之謂失其本心。"]
+   const mengzi2=["p魚，我所欲也，熊掌，亦我所欲也：/魚、熊掌：魚為尋常美味，熊掌乃珍稀佳餚，此處用以象徵價值不同之所欲。/我：我們. /所：助詞,連繫前面的主語.(In which)  /欲：想要、喜愛的。/也：語氣詞。/亦：也,也是。/p魚，我所欲也，熊掌，亦我所欲也：/p二者不可得兼，舍魚而取熊掌者也：/二者：指魚與熊掌。/不可:不可以/得: 獲取,取得./兼：同時擁有。/舍：通捨，放棄。/而：表示轉折./取：選擇、拿取。/者：表示處於某個請況.  /也: 助語詞, 者也:在這個請況下--引出下文的論說./p二者不可得兼，舍魚而取熊掌者也：/p生亦我所欲也，義亦我所欲也；二者不可得兼，舍生而取義者也：/生：生命、生存。/義：指合乎儒家倫理規範之道義。/生亦我所欲，*所欲有甚於生者，故不為苟得也：/亦: 也, 表示其中之一(生 is one of my 所欲)/*所欲: (有一些,其他的)'所欲'./有:表示一個狀態./甚:超過/於:介詞./者，表示假設./故：便會. '者,故'='if...then'./不為: 不為之的略寫./苟:苟且,不正當/得：獲得./p生亦我所欲，所欲有甚於生者，故不為苟得也：/p死亦我所惡，所惡有甚於死者，故患有所不辟也：/惡：厭惡、憎惡。/所惡：相對所欲。/患：禍患,招致禍患,指招致死亡。/有:存在/所:處竟,一個狀態/辟，通避. 不辟: 不躲避/p死亦我所惡，所惡有甚於死者，故患有所不辟也/p如使人之所欲莫甚於生，則凡可以得生者，何不用也？/如:舉例,比如./使：假如。/人之所欲:人想得到的. /莫：否定,如沒有。/甚: 更甚/所欲莫甚於生：沒有存在比生存更大的慾望。/則：那麼。/凡：凡是、所有。/可:可以,/以:赖以,用以/得:取得/生:生存,指生存的手段./者：助詞,引出論點,可翻譯為'的話'./何:為何, 何不, 為何不會/用:採用./也:助語詞,反問語氣./p如使人之所欲莫甚於生，則凡可以得生者，何不用也？/p使人之所惡莫甚於死者，則凡可以辟患者，何不為也？/所惡莫甚於死者:沒有存在比死亡更大的討厭./可:可以./以:赖以,用以./辟患:躲避招致死亡的禍患./者：助詞,引出論點,可翻譯為'的話'./為: 做./何不為也: 為何不做呢?/p使人之所惡莫甚於死者，則凡可以辟患者，何不為也？/p由是則生而有不用也，由是則可以辟患而有不為也./由:從,根據./是:這,指上面的論述./則:那麼/生：生存、活命。可以生的省略./而：卻。/有:存在/不用也：不去採取(保命的手段)./可以辟患而有不為也: 可以憑著某個手段躲開招致死亡的禍患卻不做呢./p由是則生而有不用也，由是則可以辟患而有不為也./p是故所欲有甚於生者，所惡有甚於死者。/是:這./故：因此. 是故,這是因為, 承上啟下。/所欲:泛指人的追求./有甚於生者：比生命更重要的./所惡:泛指人的厭惡,不想承受的./有甚於死者：比死亡更難接受的/p是故所欲有甚於生者，所惡有甚於死者。/p非獨賢者有是心也，人皆有之，賢者能勿喪耳。/非:不/獨：單,非獨:不單只,不僅、不只。/賢者：有學問,品德、修養的人。/是：這。/心，想法,意念./也,助語詞./皆:都./有:具有/之:這個想法./能:能夠./勿:不./喪:喪失./耳:罷了. 賢者能勿喪耳: 只是賢者能夠不喪失(這個意念)罷了./人皆有之：每個人都有這個想法./p非獨賢者有是心也，人皆有之，賢者能勿喪耳。"]
+   const shishuo1=['古之學者必有師。師者，所以傳道、受業、解惑也。人非生而知之者，孰能無惑？惑而不從師，其為惑也終不解矣。/生乎吾前，其聞道也，固先乎吾，吾從而師之；生乎吾後，其聞道也，亦先乎吾，吾從而師之。/吾師道也，夫庸知其年之先後生於吾乎？是故無貴無賤，無長無少，道之所存，師之所存也。/嗟乎！師道之不傳也久矣！欲人之無惑也難矣！古之聖人，其出人也遠矣，猶且從師而問焉；今之眾人，其下聖人也亦遠矣，而恥學於師。是故聖益聖，愚益愚，聖人之所以為聖，愚人之所以為愚，其皆出於此乎！/愛其子，擇師而教之；於其身也，則恥師焉，惑矣！彼童子之師，授之書而習其句讀者，非吾所謂傳其道、解其惑者也。句讀之不知，惑之不解，或師焉，或不焉，小學而大遺，吾未見其明也。/巫、醫、樂師、百工之人，不恥相師；士大夫之族，曰師、曰弟子云者，則羣聚而笑之。問之，則曰︰彼與彼年相若也，道相似也。位卑則足羞，官盛則近諛。嗚呼！師道之不復，可知矣。巫、醫、樂師、百工之人，君子不齒，今其智乃反不能及，其可怪也歟！/聖人無常師，孔子師郯子、萇弘、師襄、老聃。郯子之徒，其賢不及孔子。孔子曰︰三人行，則必有我師。是故弟子不必不如師，師不必賢於弟子；聞道有先後，術業有專攻，如是而已。/李氏子蟠，年十七，好古文，六藝經傳，皆通習之，不拘於時，學於余。余嘉其能行古道，作《師說》以貽之。']
+
+  
+  const shishuo2=['古之學者必有師。/古：古代、往昔。之：的。學,求學、學習；者,代詞,指xx的人。學者,即求學的人。必：必定、必然。有：擁有。師：老師/古之學者必有師。/師者，所以傳道、受業、解惑也。/師：老師,者,語氣提頓，引出定義與解釋。所以：憑藉,用來(which is for),所指師者,以,用以。傳：傳授、傳承；道:指儒家奉行的聖人之道。受，同授，教授、講授；業，指具體的學業、知識與技能.解，解答、消除；惑，疑惑、困惑 ,兼指道與業方面的疑難。/師者，所以傳道、受業、解惑也。/人非生而知之者，孰能無惑？惑而不從師，其為惑也終不解矣。/人:一般人,非:不是. 生而知之：語出《論語》，生來就擁有知識。者:提頓語氣. 孰：誰, 能:能夠. 無惑:沒有疑惑。其:指那些疑惑；為惑作為疑惑；也,語氣詞，表示停頓。終：最終. 不解,不能解答,理解. 矣,了/人非生而知之者，孰能無惑？惑而不從師，其為惑也終不解矣。/生乎吾後: 出生於我之後./其：生於我之前的人,生於我之後的人。/聞：領悟、掌握。/道：道理,學問。/也：語氣助詞,推論語氣。/固：固然,原本,指根據原本順應的次序。/亦: 也. (若然亦)的簡化, 為了工整./先乎吾: 先於我, 比我領先. /從: 跟從,跟隨。/而：並且。/師之:以之為師。之: 先於我聞道的那個人./生乎吾後: 出生於我之後./生乎吾前，其聞道也，固先乎吾，吾從而師之；生乎吾後，其聞道也，亦先乎吾，吾從而師之。/吾師道也，夫庸知其年之先後生於吾乎？/吾:我./師：動詞，學習、師法。/道：道理,學問。/也：語氣助詞,強調。/夫：語氣助詞，引出議論。/庸：需要,必要,例如毋庸置疑解無需置疑。/知：知道。/其：那人。/年: 指年歲. 之: 的. 先後生於吾: 先出生於我or後出生於我./乎：語氣詞，表示反問。/吾師道也，夫庸知其年之先後生於吾乎?/是故無貴無賤，無長無少，道之所存，師之所存也。/是:這,這是./故：因為,因此./無:沒有,沒有區分./貴,賤:社會地位的高低./長少：年齡大少,輩分高低./道：儒家人倫之道./之：助詞,得,得到./所 :助詞,連繫前面的主語.(In which)/存：存在,保留. 指道的確立./師：老師。/也：強調語氣。/是故無貴無賤，無長無少，道之所存，師之所存也。']
+
+
+
+
+    // SVG Icons
+ const speakerIcon = `<svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>`;
+    const stopIcon = `<svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>`;
+
+    function toggleSpeak(text, btn) {
+        // If this specific button is already in "Speaking" mode, stop everything
+        if (btn.classList.contains('is-speaking')) {
+            window.speechSynthesis.cancel();
+            resetAllButtons();
+            return;
+        }
+
+        // 1. Stop any existing speech and reset other buttons
+        window.speechSynthesis.cancel();
+        resetAllButtons();
+
+        // 2. Prepare new speech
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-HK';
+        utterance.pitch = 1.2; // Girl voice profile
+        utterance.rate = 1.5; //
+
+        // 3. UI Feedback: Change logo to Stop
+        btn.innerHTML = stopIcon;
+        btn.classList.add('is-speaking');
+
+        // 4. Reset logo when finished
+        utterance.onend = () => {
+            btn.innerHTML = speakerIcon;
+            btn.classList.remove('is-speaking');
+        };
+
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function resetAllButtons() {
+        document.querySelectorAll('.play-toggle-btn').forEach(b => {
+            b.innerHTML = speakerIcon;
+            b.classList.remove('is-speaking');
+        });
+    }
+
+    // Render Logic
+    const passage=[{id:'shishuo1',arr:shishuo1},{id:'shishuo2',arr:shishuo2},
+                   {id:'mengzi1',arr:mengzi1},{id:'mengzi2',arr:mengzi2},{id:'mengzi3',arr:mengzi3}];
+    passage.forEach(e=>{
+    const app = document.getElementById(e.id);
+(e.arr).forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    
+    card.innerHTML = item.split('/').map(p => {
+        let text = p.trim();
+        const startsWithP = text.toLowerCase().startsWith('p');
+        
+        // If it starts with 'p', bold it and remove the first letter
+        const displayWeight = startsWithP ? 'font-weight: bold;' : '';
+        const displayText = startsWithP ? text.slice(1).trim() : text;
+
+        return `
+            <div class="row">
+                <span style="font-size: 1.1rem; ${displayWeight}">${displayText}</span>
+                <button class="play-toggle-btn" onclick="toggleSpeak('${displayText.replace(/'/g, "\\'")}', this)">
+                    ${speakerIcon}
+                </button>
+            </div>
+        `;
+    }).join('');
+
+    app.appendChild(card);
+});
+
+
+    });
+
+</script>
+
+
+
+    </div>
+
+    <script>
+        function openPage(evt, pageName) {
+            const pages = document.getElementsByClassName("page");
+            for (let i = 0; i < pages.length; i++) pages[i].style.display = "none";
+            const tabs = document.getElementsByClassName("tab");
+            for (let i = 0; i < tabs.length; i++) tabs[i].classList.remove("active");
+            document.getElementById(pageName).style.display = "block";
+            evt.currentTarget.classList.add("active");
+        }
+
+        function addWord() {
+            const word = document.getElementById('wordInput').value;
+            const def = document.getElementById('defInput').value;
+            if (word && def) {
+                const li = document.createElement('li');
+                li.className = 'vocab-item';
+                li.innerHTML = `<strong>${word}</strong>: ${def}`;
+                document.getElementById('list').appendChild(li);
+                document.getElementById('wordInput').value = '';
+                document.getElementById('defInput').value = '';
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
