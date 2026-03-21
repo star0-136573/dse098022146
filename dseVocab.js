@@ -2325,3 +2325,51 @@ const ex2vocab = [
   { word: "Delectable", definition: "Delicious or highly pleasant to the taste / 美味可口的" }
 ];
 
+
+
+
+
+
+const textData=[
+   {passage1: `Contrasting Perspectives on Retirement in Hong Kong.\n\nIn a rapidly evolving social landscape, the way individuals perceive retirement has taken center stage, as a recent survey unveils starkly contrasting views between different generations. While the majority of people in their 60s express an inclination to extend their working lives beyond the traditional retirement age of 65, a noteworthy surge in young people aiming to retire in their 30s or 40s highlights the shifting paradigms surrounding retirement.
+The survey conducted by the Financial Planning Research Group, involving a diverse cross-section of Hong Kong’s population, brings to light the complex attitudes towards retirement. According to the findings, more than 70% of respondents in their 60s expressed a desire to continue working past the age of 65. At the top of their list of priorities is financial stability. As the first cohort to navigate through major economic events such as the financial crisis in 1997, the SARS outbreak in 2003, the financial tsunami in 2008 and the global pandemic in 2019, they recognize the vital role continued employment plays in sustaining their quality of life. Over the past few decades, economic uncertainty and the relentless rise in the cost of living have compelled them to remain engaged in the workforce. Accordingly, they perceive working as the best way to ensure their ability to afford the necessities and even the luxuries in their later years.\n
+Another factor that fuels the desire of this generation to keep working is the sense of purpose that employment provides. Work is not just about earning a paycheck; it encompasses a sense of identity, routine and social interaction. The daily routines they've built over the years, the camaraderie they've formed with their co-workers and the meaningful tasks they perform in their jobs all come together to give them a sense of purpose. Many older individuals actually derive fulfillment from their professional roles and find purpose in their contributions to their fields. Retirement, for them, could signify missing out on these things – the mental challenges, the chance to talk to friends at work and the sense of accomplishment. 
+In stark contrast to the older generation’s perspectives, the younger demographic is redefining their views on retirement. Under the influence of the FIRE (Financial Independence, Retire Early) movement, these millennials are driven to embrace an entirely different approach to work and financial strategizing. Central to this movement is the principle of financial independence, which encourages people to save aggressively, invest wisely from a young age and live frugally to amass enough wealth to retire decades ahead of the traditional age. With some luck, retiring in one’s 30s or 40s is no longer an unachievable dream.
+Moreover, the pursuit of passions plays a pivotal role in the aspirations of the young generation towards early retirement. The desire to explore personal interests, travel and immerse themselves in life experiences outside work further motivates them to achieve financial independence as early as possible. For them, retirement means a newfound freedom to pursue their dreams and aspirations without being constrained by the demands of traditional employment which, more often than not, confines a worker to an office cubicle for as long as 10 hours from Monday to Friday. Once they have accumulated enough money to support themselves, they simply want to live life on their terms and create meaningful memories outside of their regular jobs.\n
+As Hong Kong adapts to the progressively diverging views on retirement, it becomes paramount to foster open dialogues between the older and younger generations. Policymakers should heed these differing desires in an aim to create flexible retirement plans that cater to both seniors seeking meaningful employment and young enthusiasts striving for early independence.
+`,
+  passage2: `香港退休觀念嘅對比視角.\n\n
+喺快速 Evolving 嘅社會 Landscape 之中，個人點樣睇退休已經成為咗焦點。近期一個調查 Unveils 咗唔同世代之間 Starkly contrasting 嘅觀點。雖然大多數 60 幾歲嘅人都有一種 Inclination 想延長工作壽命，但係後生一代目標喺 30s 同 40s 退休嘅趨勢，就 Highlights 咗退休 Paradigm 嘅轉變。\n
+呢項由 Financial Planning Research Group 進行嘅調查，涉及咗香港唔同嘅 Demographic。根據 Findings，超過 70% 嘅 60s Cohort 渴望喺 65 歲之後繼續工作。佢哋首要考慮嘅係財務 Stability。作為第一批 Navigate 過 1997 金融風暴、SARS 同埋全球大流行嘅 Cohort，佢哋深知持續就業對於 Sustaining 生活質素嘅重要性。面對生活成本不斷上升，佢哋認為工作係確保自己可以負擔必需品甚至奢侈品嘅最佳途徑。
+另一個因素係工作提供嘅使命感。工作唔單止係為咗份糧，仲包含咗身份認同同埋日常規律。佢哋同同事之間嘅 Camaraderie，以及喺工作中執行嘅任務，都賦予咗佢哋目標感。好多長者實際上喺專業崗位入面獲得 Fulfillment。對佢哋嚟講，退休可能意味住失去咗嗰份成就感同埋同朋友交流嘅機會。\n
+同長輩嘅觀點形成 Stark contrast，後生嘅 Demographic 正在重新定義退休。喺 FIRE 運動嘅影響下，呢班 Millennials 致力於擁抱一套完全唔同嘅理財策略。核心原則係財務獨立，鼓勵人要趁後生積極投資，並生活得好 Frugally，去 Amass 足夠嘅財富提早幾十年退休。
+此外，追求熱情喺後生一代嘅 Aspirations 入面扮演住 Pivotal 嘅角色。想探索個人興趣同旅行嘅慾望，驅使佢哋盡早達成財務獨立。對佢哋嚟講，退休意味住可以追求夢想而唔使被傳統工作 Constrained（通常要將人 Confines 喺辦公室隔間入面長達 10 粒鐘）。一旦 Accumulated 到足夠資金，佢哋就想按自己嘅方式生活。\n
+隨住香港要適應呢啲逐漸 Diverging 嘅退休觀，促進兩代溝通變得 Paramount。政策制定者應該 Heed 呢啲唔同嘅渴望，旨在制定一啲可以 Cater to 長者就業需求，同時支持年輕人 Striving 實現提早獨立嘅靈活計劃。`
+, vocab:ex1vocab},
+
+ {
+ passage1:`Tai Chi: A Gateway to Well-being in Hong Kong.\n\nIn the bustling city of Hong Kong, amidst the modern skyscrapers and vibrant streets, there exists a hidden gem cherished by its elderly population: the ancient art of tai chi. While tai chi may be less known in some parts of the world, it has captivated the hearts of locals in Hong Kong for generations. We believe it is essential to introduce this remarkable practice to our curious readers, shedding light on the myriad little-known benefits tai chi offers to both the mind and body.\nOne of the most notable benefits of tai chi lies in its ability to promote physical well-being. Through slow and deliberate movements, tai chi helps improve cardiovascular health, enhance blood circulation, and boost overall stamina. This explains the common sight of groups of elderly individuals gathering early every morning to practice the fluid movements of tai chi in public parks. It serves as a low-impact exercise that engages muscles, enhances flexibility, and improves balance. Its gentle nature makes it suitable for individuals of varying fitness levels, offering an ideal opportunity for tourists of all ages to try out this ancient art.\nIn addition to its physical advantages, tai chi is renowned for its positive impact on mental well-being. As travelers explore the bustling shopping malls of Hong Kong, the serenity and tranquility offered by tai chi represent a completely different side of the city's culture. The essence of tai chi lies in the integration of mindfulness and flowing movements that guide practitioners to control their breathing and focus on the present moment. Empirical research demonstrates that the meditative nature of tai chi significantly alleviates symptoms of depression, enhances mental acuity, and promotes a sense of inner calm. 
+ Immersing oneself in this ancient practice allows tourists to take a much-needed respite from their busy schedules in a place marked by a relentless pace and constant demands.\nBeyond the personal benefits, 
+ tai chi also offers a window into the rich cultural heritage of Hong Kong. Influenced by the principles of Taoism, tai chi reflects the deep-rooted values of harmonizing humans and nature. It may surprise you to discover that most of their graceful motions in tai chi actually mimic elements abundantly found in nature such as the free-flowing wind and water. Tai chi represents much more than just a physical exercise or a meditative practice: it embodies the city’s core values centered around the interconnectedness between people and the natural world. So instead of rushing to highly hyped tourist hotspots such as Ocean Park and Disneyland, we encourage you to join tai chi classes or observe the locals in action to fully embrace the local customs.\nAs you embark on your travel adventures, we invite you to delve into the hidden treasures of Hong Kong, one of which is the soothing world of tai chi. Its physical, mental, and cultural benefits make it a rewarding experience for any traveler seeking to broaden their horizons. You’ll never be disappointed by a trip that offers delectable cuisine, exciting shopping, and a chance to restore inner calm.`,
+
+passage2:`太極：探索香港身心健康之門\n\n喺香港呢個人來人往嘅城市入面，喺現代摩天大樓同埋 vibrant 嘅街道之間，隱藏住一份畀長者視為 cherished 嘅寶物：嗰樣嘢就係古老嘅太極藝術。雖然太極喺世界某啲地方未必咁出名，但佢已經 captivated 咗香港好幾代人嘅心。我哋認為將呢種 remarkable 嘅運動介紹畀各位好奇嘅讀者係好重要嘅，藉此去 shedding light on 太極帶畀身心嗰種 myriad 且鮮為人知嘅好處。\n太極其中一個最顯著嘅好處就係促進身體健康。透過慢而 deliberate 嘅動作，太極有助改善 cardiovascular 健康、增強血液循環，同埋提升整體嘅 stamina。呢個解釋咗點解每日朝早都會見到一班長者聚集喺公園，練習緊太極嗰啲 fluid 嘅動作。佢係一種低衝擊嘅運動，可以鍛鍊肌肉、增強柔軟度同改善平衡感。佢嗰種 gentle nature 令佢適合唔同體適能程度嘅人，亦為唔同後生或老邁嘅遊客提供咗一個試下呢種古老藝術嘅理想機會。\n除咗生理優勢，太極亦以對心理健康有正面影響而 renowned。當遊客喺香港繁忙嘅商場穿梭時，太極帶嚟嘅嗰份 serenity 同 tranquility，正正代表住呢個城市文化嘅另一面。太極嘅精髓在於將 mindfulness 同流動嘅動作結合，引導練習者控制呼吸並專注於當下。Empirical 研究顯示，太極呢種冥想式嘅特質能顯著 alleviates 抑鬱症狀、提升 mental acuity，並促進內心平靜。投身於呢種古老練習，可以等遊客喺呢個節奏 relentless、充滿壓迫感嘅地方，搵到一個難得嘅 respite。\n除咗個人層面，太極亦係了解香港豐富文化遺產嘅一個窗口。受道家思想影響，太極反映咗 harmonizing 人與自然呢種根深蒂固嘅價值觀。你可能會驚訝咁發現，太極大部分 graceful 嘅動作其實係 mimic 緊大自然入面 abundantly 存在嘅元素，例如流動嘅風同水。太極唔單止係體力勞動或者冥想練習：佢 embody 緊呢個城市以人與自然 interconnectedness 為核心嘅價值觀。所以，唔好只係衝去嗰啲 highly hyped 嘅旅遊景點（例如海洋公園同迪士尼），我哋鼓勵你參加太極班或者觀察下本地人練習，去充分感受本地習俗。\n當你 embark 旅遊冒險之際，我哋邀請你深入 delve 香港嘅隱世珍寶，當中包括太極呢個 soothing 嘅世界。佢喺生理、心理同文化上嘅好處，絕對值得每位想要 broaden horizons 嘅旅客去體驗。一個有 delectable 美食、刺激購物同埋有機會搵返內心平靜嘅旅程，絕對唔會令你失望。`,
+
+vocab:ex2vocab
+
+ },
+
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
