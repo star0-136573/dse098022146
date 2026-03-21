@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>Zhuangzi Cantonese Reader</title>
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
+      <script src='indexData.js'></script>
+    <style>
+        :root {
+            --bg: #ffffff; --line: #e2e8f0; --accent: #10b981;
+            --text-main: #1e293b; --text-sub: #64748b; --card-bg: #f8fafc;
+        }
+        body.theme-dark {
+            --bg: #0f172a; --line: #334155; --accent: #34d399;
+            --text-main: #f1f5f9; --text-sub: #94a3b8; --card-bg: #1e293b;
+        }
+        body.theme-sepia {
+            --bg: #f4f1ea; --line: #dcd7cc; --accent: #a34b32;
+            --text-main: #433422; --text-sub: #7b6a58; --card-bg: #ede9df;
+        }
+
+        body {
+            background-color: var(--bg); color: var(--text-main);
+            font-family: 'Inter', sans-serif; margin: 0; padding: 0;
+            height: 100vh; overflow: hidden;
+            display: flex; align-items: center; justify-content: flex-start;
+            transition: background-color 0.4s, color 0.4s;
+        }
+
+        /* --- TOOLBARS --- */
+        .toolbar {
+            position: fixed; top: 25px; right: 30px; display: flex; align-items: center; gap: 20px; z-index: 2000;
+        }
+        .theme-group { display: flex; gap: 10px; }
+        .theme-btn { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line); cursor: pointer; transition: transform 0.2s; }
+        .theme-btn:hover { transform: scale(1.2); }
+
+        #mute-btn {
+            background: none; border: none; cursor: pointer; color: var(--text-sub);
+            display: flex; align-items: center; transition: color 0.2s;
+        }
+        #mute-btn.is-muted { color: var(--accent); }
+        #mute-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+        /* --- NAVIGATOR --- */
+        .vert-nav {
+            position: fixed; right: 40px; top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: 20px; z-index: 1000;
+        }
+        .nav-arrow {
+            background: var(--card-bg); border: 1px solid var(--line); color: var(--text-main);
+            width: 50px; height: 50px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        .nav-arrow:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); transform: scale(1.1); }
+        .nav-arrow:disabled { opacity: 0.2; cursor: not-allowed; }
+
+        /* --- CONTENT --- */
+        .timeline-container {
+            margin-left: 120px; width: 750px; position: relative;
+            padding-left: 60px; border-left: 4px solid var(--line);
+        }
+
+        .milestone { animation: plateFade 0.6s ease forwards; }
+        @keyframes plateFade { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+        .node {
+            position: absolute; left: -71px; top: 12px;
+            width: 18px; height: 18px; background: var(--accent);
+            border: 3px solid var(--bg); border-radius: 50%; z-index: 10;
+            animation: nodeEntry 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .node::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50%; background: var(--accent);
+            animation: pulse-ring 1s ease-out 3; z-index: -1; opacity: 0;
+        }
+        @keyframes nodeEntry { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+        @keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(3); opacity: 0; } }
+
+        .topic-event { 
+            font-family: 'Noto Serif TC', serif; font-size: 1.8rem; 
+            line-height: 1.6; cursor: pointer; transition: color 0.3s;
+            margin-bottom: 40px;
+        }
+        .topic-event:hover { color: var(--accent); }
+
+        /* Meaning Group Layout */
+        .meaning-wrapper { position: relative; padding-top: 25px; }
+
+        /* Delicate Text Speaker */
+        .text-speaker-btn {
+            position: absolute; top: 0; left: 0;
+            background: none; border: none; cursor: pointer;
+            color: var(--accent); font-size: 0.65rem; font-weight: 800;
+            letter-spacing: 2px; text-transform: uppercase;
+            padding: 0; transition: opacity 0.2s;
+          
+        }
+        .text-speaker-btn::after {
+            content: ''; width: 20px; height: 1px; background: var(--accent);
+        }
+        .text-speaker-btn:hover { opacity: 0.6; }
+
+        .sub-points { display: flex; flex-wrap: wrap; gap: 12px; }
+        .data-card { 
+            background: var(--card-bg); border: 1px solid var(--line); 
+            padding: 10px 16px; border-radius: 12px; font-size: 0.9rem; 
+            cursor: pointer; transition: 0.2s; 
+        }
+        .data-card:hover { border-color: var(--accent); background: var(--bg); transform: translateY(-3px); }
+        .term-tag { color: var(--accent); font-weight: 700; margin-right: 8px; }
+
+        .progress-indicator {
+            position: absolute; top: -60px; left: 0;
+            font-size: 0.7rem; letter-spacing: 2px; color: var(--text-sub);
+            font-weight: 700; text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<div class="toolbar">
+    <button id="mute-btn" onclick="toggleAutoMute()" title="Mute Auto-Navigation Speech">
+        <svg id="icon-audio" viewBox="0 0 24 24"><path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.03,19.86 21,16.28 21,12C21,7.72 18.03,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/></svg>
+    </button>
+    <div class="theme-group">
+        <div class="theme-btn" style="background: #ffffff;" onclick="setTheme('light')" title="Light"></div>
+        <div class="theme-btn" style="background: #0f172a;" onclick="setTheme('dark')" title="Dark"></div>
+        <div class="theme-btn" style="background: #f4f1ea;" onclick="setTheme('sepia')" title="Sepia"></div>
+    </div>
+</div>
+
+<div class="vert-nav">
+    <button class="nav-arrow" id="upBtn" onclick="navigate(-1)">↑</button>
+    <button class="nav-arrow" id="downBtn" onclick="navigate(1)">↓</button>
+</div>
+
+<div class="timeline-container">
+    <div id="progress-text" class="progress-indicator">PLATE 1 OF 3</div>
+    <div id="node-anchor"></div> 
+    <div id="content-area"></div>
+</div>
+
+<script>
+    const key = localStorage.getItem('textKey');
+
+    rawData=chineseText[key];
+    //const rawData = "p惠子謂莊子曰：「魏王貽我大瓠之種，我樹之成而實五石。/惠子謂莊子曰：惠子對莊子說./魏王：魏國的國君（魏惠王）。/貽：贈送。/我：指惠子。/大瓠之種：大葫蘆的種子。/樹：種植./成：長大成熟./實：果實容量./五石：古代容量單位./p以盛水漿，其堅不能自舉也。剖之以為瓢，則瓠落無所容. /以：用來./盛：裝./水漿：水或液體./其：它./堅：堅硬程度./剖：劈開./瓢：舀水器./瓠落：寬大的樣子./無所容:沒有發揮的地方./p非不呺然大也，吾為其無用而掊之。」/非不：不是不./呺：外大而中空./然: 的樣子./吾：我./為：因為./無用：沒有用處./掊：擊碎.";
+
+    let currentIndex = 0;
+    let isAutoMuted = false;
+
+    const items = rawData.split('p').filter(s => s.trim()).map(p => {
+        const lines = p.split('/').map(l => l.trim()).filter(l => l);
+        return {
+            topic: lines[0],
+            details: lines.slice(1).map(d => {
+                const parts = d.split(/[：:]/);
+                return { term: parts[0] || "", meaning: parts[1] || "" };
+            })
+        };
+    });
+
+    function setTheme(t) { document.body.className = t === 'light' ? '' : 'theme-' + t; }
+
+    function toggleAutoMute() {
+        isAutoMuted = !isAutoMuted;
+        const btn = document.getElementById('mute-btn');
+        const icon = document.getElementById('icon-audio');
+        btn.classList.toggle('is-muted', isAutoMuted);
+        icon.innerHTML = isAutoMuted 
+            ? '<path d="M12,4L9.91,6.09L12,8.18M4.27,3L3,4.27L7.73,9H3V15H7L12,20V13.27L16.25,17.53C15.58,18.04 14.83,18.46 14,18.7V20.77C15.38,20.45 16.63,19.82 17.68,18.96L19.73,21L21,19.73L12,10.73M19,12C19,12.94 18.8,13.82 18.46,14.64L19.97,16.15C20.62,14.91 21,13.5 21,12C21,7.72 18.03,4.14 14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,12.94 18.8,13.82 18.46,14.64L19.97,16.15C20.62,14.91 21,13.5 21,12C21,7.72 18.03,4.14 14,3.23V5.29C16.89,6.15 19,8.83 19,12M16.5,12C16.5,10.23 15.5,8.71 14,7.97V10.18L16.45,12.63C16.48,12.43 16.5,12.22 16.5,12Z"/>'
+            : '<path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.03,19.86 21,16.28 21,12C21,7.72 18.03,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/>';
+        if (isAutoMuted) window.speechSynthesis.cancel();
+    }
+
+    function speak(text, isAuto = false) {
+        if (!window.speechSynthesis || (isAuto && isAutoMuted)) return;
+        window.speechSynthesis.cancel();
+        const msg = new SpeechSynthesisUtterance(text);
+        const voices = window.speechSynthesis.getVoices();
+        const cantoneseVoice = voices.find(v => v.lang === 'zh-HK' || v.lang.includes('cantonese'));
+        if (cantoneseVoice) msg.voice = cantoneseVoice;
+        msg.lang = 'zh-HK';
+        window.speechSynthesis.speak(msg);
+    }
+
+    function navigate(dir) {
+        const next = currentIndex + dir;
+        if (next >= 0 && next < items.length) {
+            currentIndex = next;
+            renderPlate(true);
+        }
+    }
+
+    function renderPlate(fromNav = false) {
+        const container = document.getElementById('content-area');
+        const nodeAnchor = document.getElementById('node-anchor');
+        const item = items[currentIndex];
+        
+        nodeAnchor.innerHTML = '<div class="node"></div>';
+        
+        container.innerHTML = `
+            <div class="milestone">
+                <div class="topic-event" onclick="speak('${item.topic}')">${item.topic}</div>
+                <div class="meaning-wrapper">
+                    <button class="text-speaker-btn" onclick="groupSpeakMeanings()">Listen</button>
+                    <div class="sub-points">
+                        ${item.details.map(d => `
+                            <div class="data-card" onclick="speak('${d.term}，意思是${d.meaning}')">
+                                <span class="term-tag">${d.term}</span>
+                                <span class="meaning-text">${d.meaning}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        updateUI();
+        if (fromNav) {
+            const fullText = `${item.topic}。其中包括：` + item.details.map(d => `${d.term}的意思是${d.meaning}`).join('，');
+            speak(fullText, true);
+        }
+    }
+
+    function groupSpeakMeanings() {
+        const text = items[currentIndex].details.map(d => `${d.term}的意思是${d.meaning}`).join('，');
+        speak(text);
+    }
+
+    function updateUI() {
+        document.getElementById('upBtn').disabled = currentIndex === 0;
+        document.getElementById('downBtn').disabled = currentIndex === items.length - 1;
+        document.getElementById('progress-text').innerText = `PLATE ${currentIndex + 1} OF ${items.length}`;
+    }
+
+    window.speechSynthesis.onvoiceschanged = () => {};
+    renderPlate();
+</script>
+<script>
+    /* ... (rest of the CSS and HTML remains identical) ... */
+
+    function initKeyboard() {
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp') {
+                navigate(-1);
+            } else if (e.key === 'ArrowDown') {
+                navigate(1);
+            }
+        });
+    }
+
+    function speak(text, isAuto = false) {
+        if (!window.speechSynthesis || (isAuto && isAutoMuted)) return;
+        window.speechSynthesis.cancel();
+        
+        const msg = new SpeechSynthesisUtterance(text);
+        const voices = window.speechSynthesis.getVoices();
+        const cantoneseVoice = voices.find(v => v.lang === 'zh-HK' || v.lang.includes('cantonese'));
+        
+        if (cantoneseVoice) msg.voice = cantoneseVoice;
+        msg.lang = 'zh-HK';
+
+        // Visual feedback for the Glossary text
+        const speakerBtn = document.querySelector('.text-speaker-btn');
+        msg.onstart = () => { if(speakerBtn) speakerBtn.style.opacity = "0.4"; };
+        msg.onend = () => { if(speakerBtn) speakerBtn.style.opacity = "1"; };
+
+        window.speechSynthesis.speak(msg);
+    }
+
+    /* ... (rest of the functions remain the same) ... */
+
+    // Final Initialization
+    window.speechSynthesis.onvoiceschanged = () => {};
+    renderPlate();
+    initKeyboard(); // Start listening for keys
+</script>
+
+</body>
+</html>

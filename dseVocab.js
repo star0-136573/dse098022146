@@ -2267,3 +2267,61 @@ const dseVocab = [
 
 
 ];
+
+const ex1vocab = [
+  { word: "Evolving", definition: "Developing gradually / 正在發展的；演變中的" },
+  { word: "Landscape", definition: "The general situation or context of a specific activity / 局勢；景象" },
+  { word: "Paradigm", definition: "A typical example, pattern, or model of something / 範例；模式" },
+  { word: "Demographic", definition: "A particular sector of a population / 特定人口統計組別" },
+  { word: "Diverging", definition: "Developing in different directions; becoming different / 分歧的；相異的" },
+  { word: "Paramount", definition: "More important than anything else; supreme / 首要的；至高無上的" },
+  { word: "Unveils", definition: "To show or announce something publicly for the first time / 揭露；公佈" },
+  { word: "Inclination", definition: "A feeling that makes you want to do something / 傾向；意向" },
+  { word: "Stability", definition: "The state of being stable or secure / 穩定性" },
+  { word: "Cohort", definition: "A group of people with a shared characteristic / 一群人；（有共同特點的）組別" },
+  { word: "Sustaining", definition: "Supporting or maintaining something over a period of time / 維持；支撐" },
+  { word: "Frugally", definition: "In a way that is sparing or economical with money / 節儉地" },
+  { word: "Amass", definition: "To gather or accumulate a large amount of wealth / 積聚；堆積" },
+  { word: "Cater to", definition: "To provide what is needed or required by a specific group / 迎合；滿足需求" },
+  { word: "Camaraderie", definition: "Mutual trust and friendship among people / 同志情誼；友情" },
+  { word: "Fulfillment", definition: "A feeling of satisfaction from achieving something / 成就感；滿足感" },
+  { word: "Pivotal", definition: "Of crucial importance in relation to success / 關鍵的；核心的" },
+  { word: "Aspirations", definition: "A hope or ambition of achieving something / 抱負；志向" },
+  { word: "Constrained", definition: "Severely restricted in scope or freedom / 受限的；約束的" },
+  { word: "Striving", definition: "Making great efforts to achieve something / 奮力；努力爭取" },
+  { word: "Heed", definition: "To pay attention to advice or a warning / 留心；聽從" }
+];
+
+
+const ex2vocab = [
+  { word: "Bustling", definition: "Full of energetic and noisy activity / 繁忙的；喧鬧的" },
+  { word: "Vibrant", definition: "Full of energy and life / 充滿活力的" },
+  { word: "Cherished", definition: "Valued or loved dearly / 珍愛的；珍視的" },
+  { word: "Captivated", definition: "Attracted and held the interest of / 被深深吸引" },
+  { word: "Remarkable", definition: "Worthy of attention; striking / 非凡的；值得注意的" },
+  { word: "Myriad", definition: "A countless or extremely great number / 極大量的；無數的" },
+  { word: "Cardiovascular", definition: "Relating to the heart and blood vessels / 心血管的" },
+  { word: "Stamina", definition: "The ability to sustain physical or mental effort / 耐力；精力" },
+  { word: "Deliberate", definition: "Done consciously and intentionally; slow and careful / 深思熟慮的；從容不迫的" },
+  { word: "Serenity", definition: "The state of being calm and peaceful / 寧靜；平靜" },
+  { word: "Tranquility", definition: "A state of peace and quiet / 安寧；平靜" },
+  { word: "Mindfulness", definition: "Focusing one's awareness on the present moment / 正念；專注" },
+  { word: "Empirical", definition: "Based on observation or experience rather than theory / 以經驗/觀察為依據的" },
+  { word: "Alleviates", definition: "Makes suffering or a problem less severe / 減輕；緩和" },
+  { word: "Mental acuity", definition: "Sharpness or keenness of thought / 思維敏銳度" },
+  { word: "Respite", definition: "A short period of rest from something difficult / 暫時的喘息；休息" },
+  { word: "Relentless", definition: "Constant and never-ending / 持續不斷的；無情的" },
+  { word: "Harmonizing", definition: "Bringing into a consistent or pleasing whole / 使和諧；使協調" },
+  { word: "Graceful", definition: "Having or showing elegance / 優美的；雅致的" },
+  { word: "Mimic", definition: "To imitate or copy / 模仿" },
+  { word: "Abundantly", definition: "In large quantities; plentifully / 豐富地；大量地" },
+  { word: "Embody", definition: "To be an expression of or give a tangible form to / 體現；具體化" },
+  { word: "Interconnectedness", definition: "The state of being linked together / 互聯性" },
+  { word: "Hype", definition: "Extravagant publicity or promotion / 大肆宣傳；炒作" },
+  { word: "Embark", definition: "To begin a course of action or journey / 著手；開始旅行" },
+  { word: "Delve", definition: "To reach inside or examine in detail / 深入探究" },
+  { word: "Soothing", definition: "Having a gently calming effect / 舒緩的；撫慰的" },
+  { word: "Broaden horizons", definition: "To expand one's range of knowledge or experience / 開闊眼界" },
+  { word: "Delectable", definition: "Delicious or highly pleasant to the taste / 美味可口的" }
+];
+

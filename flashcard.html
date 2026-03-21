@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Flow</title>
+    <style>
+        body {
+            margin: 0;
+            background: #050505;
+            color: #fff;
+            font-family: 'Inter', -apple-system, sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Progress Bar */
+        #progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 3px; background: rgba(255,255,255,0.05); z-index: 20; }
+        #progress-bar { height: 100%; width: 0%; background: #00d2ff; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 10px rgba(0,210,255,0.5); }
+
+        /* Interaction Zones */
+        .zone { position: fixed; z-index: 10; opacity: 0; transition: opacity 0.3s; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; letter-spacing: 2px; color: rgba(255,255,255,0.3); cursor: pointer; }
+        .zone:hover { opacity: 1; background: rgba(255,255,255,0.02); }
+        .top { top: 0; width: 100%; height: 15%; }
+        .bottom { bottom: 0; width: 100%; height: 25%; }
+        .left { left: 0; width: 15%; height: 60%; top: 15%; }
+        .right { right: 0; width: 15%; height: 60%; top: 15%; }
+
+        /* Main Content */
+        #content { text-align: center; max-width: 75vw; transition: all 0.4s ease; z-index: 5; }
+        .counter { font-size: 0.7rem; color: #504e4e; margin-bottom: 0.5rem; font-variant-numeric: tabular-nums; }
+        .label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.4em; color: #666; margin-bottom: 2.5rem; transition: color 0.3s; }
+        .text { font-size: 2.4rem; font-weight: 300; line-height: 1.4; cursor: help; }
+        
+        .glow {
+            position: fixed; top: 50%; left: 50%; width: 60vw; height: 60vw;
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.03) 0%, rgba(0,0,0,0) 70%);
+            transform: translate(-50%, -50%); z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="progress-container"><div id="progress-bar"></div></div>
+    <div class="glow"></div>
+
+    <div class="zone top" onclick="toggleMode()">MODE</div>
+    <div class="zone left" onclick="prev()">PREV</div>
+    <div class="zone right" onclick="next()">NEXT</div>
+    <div class="zone bottom" onclick="reveal()">REVEAL</div>
+
+    <div id="content">
+        <div class="counter" id="counter">0 / 0</div>
+        <div class="label" id="label">TAP RIGHT TO START</div>
+        <div class="text" id="display" onclick="speak()">...</div>
+    </div>
+
+<script>
+    const Vocab = JSON.parse(localStorage.getItem('flashcards'))|| [];
+    
+    let index = -1;
+    let isRevealed = false;
+    let modeWordFirst = true;
+
+    function toggleMode() {
+        modeWordFirst = !modeWordFirst;
+        isRevealed = false;
+        updateUI();
+    }
+
+    function reveal() {
+        if (index === -1) return;
+        isRevealed = !isRevealed;
+        updateUI();
+    }
+
+    function next() {
+      //  toggleFullScreen();
+       
+        index = (index + 1) % Vocab.length;
+        if(index==(Vocab.length-1)) alert('finished');
+        isRevealed = false;
+        animateAndUI();
+      
+    }
+
+    function prev() {
+        index = (index - 1 + Vocab.length) % Vocab.length;
+        isRevealed = false;
+        animateAndUI();
+    }
+
+    function animateAndUI() {
+        const content = document.getElementById('content');
+        content.style.opacity = 0;
+        setTimeout(() => {
+            updateUI();
+            content.style.opacity = 1;
+        }, 200);
+    }
+
+    function updateUI() {
+        const label = document.getElementById('label');
+        const display = document.getElementById('display');
+        const counter = document.getElementById('counter');
+        const bar = document.getElementById('progress-bar');
+        
+        if (index === -1) {
+            counter.innerText = `0 / ${Vocab.length}`;
+            return;
+        }
+
+        const item = Vocab[index];
+        const progress = ((index + 1) / Vocab.length) * 100;
+        bar.style.width = `${progress}%`;
+        counter.innerText = `${index + 1} / ${Vocab.length}`;
+
+        if (modeWordFirst) {
+            label.innerText = isRevealed ? "DEFINITION" : "VOCABULARY";
+            display.innerText = isRevealed ? item.definition : item.word;
+        } else {
+            label.innerText = isRevealed ? "VOCABULARY" : "DEFINITION";
+            display.innerText = isRevealed ? item.word : item.definition;
+        }
+        label.style.color = isRevealed ? "#00d2ff" : "#666";
+    }
+
+    function speak() {
+        const text = document.getElementById('display').innerText;
+        window.speechSynthesis.cancel(); // Stop current speech
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.9;
+        // Detect if it's Chinese to adjust voice if possible
+        utterance.lang = text.match(/[\u4e00-\u9fa5]/) ? 'zh-HK' : 'en-US';
+        window.speechSynthesis.speak(utterance);
+    }
+
+
+    function toggleFullScreen() {
+  if (!document.fullscreenElement &&    // alternative standard method
+      !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    } else if (document.documentElement.msRequestFullscreen) {
+      document.documentElement.msRequestFullscreen();
+    } else if (document.documentElement.mozRequestFullScreen) {
+      document.documentElement.mozRequestFullScreen();
+    } else if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen();
+    }
+  } 
+//   else {
+//     if (document.exitFullscreen) {
+//       document.exitFullscreen();
+//     } else if (document.msExitFullscreen) {
+//       document.msExitFullscreen();
+//     } else if (document.mozCancelFullScreen) {
+//       document.mozCancelFullScreen();
+//     } else if (document.webkitExitFullscreen) {
+//       document.webkitExitFullscreen();
+//     }
+//   }
+}
+
+// Attach the function to the button click event
+
+
+
+
+</script>
+</body>
+</html>
