@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>Mengzi Focused Reader - Interactive</title>
+    <script >
+    const userColor = localStorage.getItem('themeColor')||'#ffcc00';
+    if (userColor) {
+        document.documentElement.style.setProperty('--accent', userColor);
+    }
+    </script>
+    <style>
+
+   
+    mark { text-shadow: 0 0 12px var(--accent); }
+    
+    /* Optional: Home Button */
+    .home-btn { position: fixed; top: 20px; right: 20px; color: #555; text-decoration: none; font-size: 0.8rem; z-index: 100; }
+        body {
+            background-color: #0a0a0a;
+            color: #d1d1d1;
+            font-family: "PingFang TC", "Microsoft JhengHei", serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            cursor: pointer;
+            user-select: none;
+        }
+        #progress-container { position: fixed; top: 0; width: 100%; height: 3px; background: #222; }
+        #progress-bar { width: 0%; height: 100%; background: var(--accent); transition: width 0.4s; }
+        
+        #display-container { text-align: center; max-width: 85%; min-height: 450px; z-index: 2; }
+        
+        .line {
+            font-size: 1.4rem; /* Adjusted for better fit */
+            line-height: 1.8; /* Increased line height */
+            margin: 10px 0; 
+            opacity: 0;
+            transform: translateY(10px); 
+            transition: all 0.5s ease;
+            padding: 8px; 
+            border-radius: 6px;
+        }
+        .line:hover { background: rgba(255, 255, 255, 0.05); }
+        .line.active { opacity: 1; transform: translateY(0); }
+        .line.dimmed { opacity: 0.3; } 
+
+        .term-highlight { color: var(--accent); font-weight: bold; }
+        mark { background: none; color: #fff; text-shadow: 0 0 12px #ffcc00; font-weight: bold; }
+
+        .header {
+            font-size: 2.2rem; font-weight: bold; color: var(--accent);
+            margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 15px;
+        }
+
+        .nav-zone {
+            position: fixed; top: 0; height: 100%; width: 10%; z-index: 1;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.03); font-size: 1rem; transition: 0.3s;
+        }
+        .nav-zone:hover { color: rgba(255,255,255,0.1); }
+        .left-zone { left: 0; }
+        .right-zone { right: 0; }
+
+        #status-hint {
+            position: fixed; bottom: 20px; font-size: 0.75rem; color: #444;
+            letter-spacing: 1px; text-align: center;
+        }
+    </style>
+    <script src='indexData.js'></script>
+</head>
+<body onclick="handleGlobalClick(event)" ondblclick="showAllSublines()">
+
+<div id="progress-container"><div id="progress-bar"></div></div>
+<div class="nav-zone left-zone">PREV</div>
+<div class="nav-zone right-zone">NEXT</div>
+
+<div id="display-container">
+    <div id="header-area"></div>
+    <div id="content-area"></div>
+</div>
+
+<div id="status-hint">
+    CLICK LINE: Restart from there | DBL-CLICK: Show Block | ARROWS: Topic Nav
+</div>
+<a href="index.html" class="home-btn">✕ EXIT</a>
+<script>
+    // const rawData = "p魚，我所欲也，熊掌，亦我所欲也：/魚、熊掌：魚為尋常美味，熊掌乃珍稀佳餚，此處用以象徵價值不同之所欲。/我：我們. /所：助詞,連繫前面的主語.(In which)  /欲：想要、喜愛的。/也：語氣詞。/亦：也,也是。/p二者不可得兼，舍魚而取熊掌者也：/二者：指魚與熊掌。/不可:不可以/得: 獲取,取得./兼：同時擁有。/舍：通捨，放棄。/而：表示轉折./取：選擇、拿取。";
+   
+    const key = localStorage.getItem('textKey');
+
+    rawData=chineseText[key];
+    const lines = rawData.split('/').filter(l => l.trim() !== "");
+    let index = -1;
+    let isPlaying = false;
+    let currentElement = null;
+
+    function formatLine(text) {
+        if (text.startsWith('p')) return text.substring(1);
+        return text.replace(/^([^：:，,]+)([：:，,])/, '<span class="term-highlight">$1</span>$2');
+    }
+
+    function speak(text) {
+        window.speechSynthesis.cancel();
+        const cleanText = text.startsWith('p') ? text.substring(1) : text;
+        const msg = new SpeechSynthesisUtterance(cleanText);
+        msg.lang = 'zh-HK';
+        msg.rate = 0.95;
+
+        msg.onboundary = (event) => {
+            if (!currentElement) return;
+            const { charIndex, charLength } = event;
+            const word = cleanText.substring(charIndex, charIndex + (charLength || 1));
+            currentElement.innerHTML = formatLine(cleanText.substring(0, charIndex) + `<mark>${word}</mark>` + cleanText.substring(charIndex + (charLength || 1)));
+        };
+
+        msg.onend = () => {
+            if (currentElement) {
+                currentElement.innerHTML = formatLine(text);
+                currentElement.classList.remove('dimmed');
+            }
+            const isEndOfBlock = (index + 1 < lines.length && lines[index + 1].startsWith('p')) || (index === lines.length - 1);
+            if (isEndOfBlock) pause();
+            else if (isPlaying) setTimeout(nextLine, 1000);
+        };
+        window.speechSynthesis.speak(msg);
+    }
+
+    function jumpToLine(idx) {
+        // Stop current audio and clear future lines
+        window.speechSynthesis.cancel();
+        isPlaying = true;
+        
+        // Remove any rendered lines that come after the target index
+        const contentArea = document.getElementById('content-area');
+        const renderedLines = contentArea.querySelectorAll('.line');
+        renderedLines.forEach(el => {
+            const elIdx = parseInt(el.id.replace('line-', ''));
+            if (elIdx > idx) el.remove();
+            else if (elIdx === idx) {
+                el.classList.remove('dimmed');
+                currentElement = el;
+            } else {
+                el.classList.add('active');
+                el.classList.remove('dimmed');
+            }
+        });
+
+        // If the line isn't rendered yet (e.g. jumping via logic), render it
+        if (!document.getElementById(`line-${idx}`)) {
+            updateDisplay(idx);
+        } else {
+            index = idx;
+            document.getElementById('progress-bar').style.width = ((index + 1) / lines.length * 100) + "%";
+            speak(lines[index]);
+        }
+    }
+
+    function showAllSublines() {
+        if (index === -1) return;
+        let blockStart = index;
+        while(blockStart > 0 && !lines[blockStart].startsWith('p')) blockStart--;
+        let blockEnd = index;
+        while(blockEnd < lines.length - 1 && !lines[blockEnd + 1].startsWith('p')) blockEnd++;
+
+        const contentArea = document.getElementById('content-area');
+        contentArea.innerHTML = ''; 
+
+        for (let i = blockStart + 1; i <= blockEnd; i++) {
+            const d = document.createElement('div');
+            d.className = `line active ${i > index ? 'dimmed' : ''}`;
+            d.id = `line-${i}`;
+            d.innerHTML = formatLine(lines[i]);
+            d.onclick = (e) => { e.stopPropagation(); jumpToLine(i); };
+            contentArea.appendChild(d);
+            if (i === index) currentElement = d;
+        }
+    }
+
+    function updateDisplay(targetIdx) {
+       // toggleFullScreen();
+        index = targetIdx;
+        const text = lines[index];
+        const isHeader = text.startsWith('p');
+
+        if (isHeader) {
+            document.getElementById('header-area').innerHTML = `<div class="line header active" onclick="event.stopPropagation(); jumpToLine(${index})">${text.substring(1)}</div>`;
+            document.getElementById('content-area').innerHTML = '';
+            currentElement = document.querySelector('.header');
+        } else {
+            ensureHeader();
+            const d = document.createElement('div');
+            d.className = 'line active';
+            d.id = `line-${index}`;
+            d.innerHTML = formatLine(text);
+            d.onclick = (e) => { e.stopPropagation(); jumpToLine(index); };
+            document.getElementById('content-area').appendChild(d);
+            currentElement = d;
+        }
+        
+        document.getElementById('progress-bar').style.width = ((index + 1) / lines.length * 100) + "%";
+        speak(text);
+    }
+
+    function ensureHeader() {
+        if (!document.getElementById('header-area').innerHTML) {
+            let blockStart = index;
+            while(blockStart > 0 && !lines[blockStart].startsWith('p')) blockStart--;
+            document.getElementById('header-area').innerHTML = `<div class="line header active" onclick="event.stopPropagation(); jumpToLine(${blockStart})">${lines[blockStart].substring(1)}</div>`;
+        }
+    }
+
+    function nextLine() { 
+        
+        if (index < lines.length - 1) {
+            let nextIdx = index + 1;
+            const existing = document.getElementById(`line-${nextIdx}`);
+            if (existing) {
+                index = nextIdx;
+                currentElement = existing;
+                currentElement.classList.remove('dimmed');
+                speak(lines[index]);
+                document.getElementById('progress-bar').style.width = ((index + 1) / lines.length * 100) + "%";
+            } else {
+                updateDisplay(nextIdx);
+            }
+        } 
+    }
+
+    function togglePlay() {
+        if (isPlaying) pause();
+        else {
+            isPlaying = true;
+            if (index === -1) updateDisplay(0);
+            else nextLine();
+        }
+    }
+
+    function pause() {
+        isPlaying = false;
+        window.speechSynthesis.cancel();
+    }
+
+    function navigateTopic(dir) {
+        let target = -1;
+        if (dir === 'next') {
+            for (let i = index + 1; i < lines.length; i++) if (lines[i].startsWith('p')) { target = i; break; }
+        } else {
+            let currBlock = index;
+            while(currBlock > 0 && !lines[currBlock].startsWith('p')) currBlock--;
+            for (let i = currBlock - 1; i >= 0; i--) if (lines[i].startsWith('p')) { target = i; break; }
+            if (target === -1 && currBlock !== 0) target = 0;
+        }
+        if (target !== -1) { isPlaying = true; updateDisplay(target); }
+    }
+
+    function handleGlobalClick(e) {
+        const width = window.innerWidth;
+        if (e.clientX < width * 0.10) navigateTopic('prev');
+        else if (e.clientX > width * 0.90) navigateTopic('next');
+        else togglePlay();
+    }
+
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+        if (e.code === 'ArrowLeft') navigateTopic('prev');
+        if (e.code === 'ArrowRight') navigateTopic('next');
+        if (e.key.toLowerCase() === 'a') showAllSublines();
+    });
+
+
+        function toggleFullScreen() {
+  if (!document.fullscreenElement &&    // alternative standard method
+      !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    } else if (document.documentElement.msRequestFullscreen) {
+      document.documentElement.msRequestFullscreen();
+    } else if (document.documentElement.mozRequestFullScreen) {
+      document.documentElement.mozRequestFullScreen();
+    } else if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen();
+    }
+  } 
+//   else {
+//     if (document.exitFullscreen) {
+//       document.exitFullscreen();
+//     } else if (document.msExitFullscreen) {
+//       document.msExitFullscreen();
+//     } else if (document.mozCancelFullScreen) {
+//       document.mozCancelFullScreen();
+//     } else if (document.webkitExitFullscreen) {
+//       document.webkitExitFullscreen();
+//     }
+//   }
+}
+</script>
+</body>
+</html>

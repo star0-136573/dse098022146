@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learning Portal</title>
     <script src="dseVocab.js"></script>
-    <script src="readingText.js"></script>
     <script src="indexData.js"></script>
     <style>
             
@@ -559,6 +558,7 @@ button:disabled:hover {
         <div class="tab active" onclick="openPage(event, 'vocabulary')">Vocabulary</div>
         <div class="tab" onclick="openPage(event, 'writing')">Writing</div>
         <div class="tab" onclick="openPage(event, 'chinese')">中文</div>
+        <!-- <div class="tab" onclick="openPage(event, 'Info')">Info</div> -->
     </div>
 
     <!-- VOCABULARY PAGE -->
@@ -588,6 +588,7 @@ button:disabled:hover {
  <button class="add-btn2" onclick="flashcard()">FlashCard</button><br> 
 
 <button class="add-btn2" onclick="displayWords();openModal('storyModal')">story/essay</button>
+<button class="add-btn2" onclick="openModal('weekly')">Weekly Vocabs</button>
 </div> <br>
 
     <br>
@@ -628,6 +629,34 @@ button:disabled:hover {
   </div>
 </div>
 
+<div id="weekly" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('weekly')">&times;</span>
+    <h3>Road to <span id="totalvocabs">0</span></h3>
+    
+    <!-- Progress Board -->
+    <div class="progress-container" style="display: flex; align-items: center; gap: 10px; margin: 20px 0;">
+      <button onclick="updateProgress(-100)">-100</button>
+      <div style="flex-grow: 1; background: #eee; height: 20px; border-radius: 10px; overflow: hidden;">
+        <div id="progressBar" style="width: 0%; height: 100%; background: #4CAF50; transition: width 0.3s;"></div>
+      </div>
+      <button onclick="updateProgress(100)">+100</button>
+    </div>
+
+    <p id="progressText">0 / 0</p>
+    <p id='words'></p>
+
+    <!-- Controls -->
+    <div class="modal-actions" style="margin-top: 20px; display: flex; gap: 10px;">
+      <button onclick="updateProgress(100)">Next Stage (+100)</button>
+      <button onclick="saveAndClose()" style="background: #2196F3; color: white;">Load & Save</button>
+    </div>
+  </div>
+</div>
+
+
+
+
  <div class="select-group">
     <div class="custom-select-wrapper">
         <select id="startIdx"></select>
@@ -635,9 +664,14 @@ button:disabled:hover {
     <div class="custom-select-wrapper">
         <select id="endIdx"></select>
     </div>
-    <button class="add-btn" onclick="openModal('vocabModal')">➕ Add Vocab</button>
+    <button class="add-btn" onclick="openModal('vocabModal');">➕ Add</button>
 <button class="add-btn" onclick="download('vocabContainer')">download</button>
-<button class="add-btn" onclick="dseVocabs()">Dse Vocabs</button><br>
+
+<button class="add-btn"  onclick="window.location.reload()">MyList</button>
+<button class="add-btn"  onclick="dseVocabs(ceVocab)">HKCEE</button>
+<button class="add-btn" onclick="dseVocabs(dseVocab1)">DSE 1</button>
+<button class="add-btn" onclick="dseVocabs(dseVocab2)">DSE 2</button>
+<button class="add-btn" onclick="dseVocabs(AlVocab)">HKASL</button><br>
 </div>
     <div id="vocabContainer"></div>
      <br><br>
@@ -651,6 +685,9 @@ button:disabled:hover {
     <!-- Load the external data first -->
 <!--     <script src="vocab.js"></script> -->
 <script >
+
+
+
     	    // Load data from localStorage or default to empty array
 let vocabList = JSON.parse(localStorage.getItem('vocabData')) || [];
 document.getElementById('storytext').innerHTML=JSON.parse(localStorage.getItem('storyArea')) || [];
@@ -690,8 +727,8 @@ loadVocab();
 
 
     <script >
-      function dseVocabs(){
-         vocabList=dseVocab;
+      function dseVocabs(dsevocab){
+         vocabList=dsevocab;
           const container = document.getElementById('vocabContainer');
     container.innerHTML = '';
      
@@ -725,8 +762,61 @@ loadVocab();
 
 
     </script>
-    <!-- droplist -->
-    <!-- Include html2pdf.js via CDN -->
+<script>
+
+let totalList = ceVocab.concat(dseVocab1).concat(dseVocab2).concat(AlVocab);
+
+let templist=[];
+totalList.forEach(e=>{
+    if(!templist.includes(e.word))
+    templist.push(e.word);
+    else console.log(e.word);
+    
+})
+
+
+
+document.getElementById('totalvocabs').innerHTML= totalList.length;
+
+ let currentVal = parseInt(localStorage.getItem('progress'))||0;
+  let targetVal = totalList.length; // Example target
+  
+  
+  updateProgress(0);
+
+  function updateProgress(amt) {
+    if(currentVal < targetVal){
+    
+    currentVal = Math.max(0, currentVal + amt);
+    const percentage = Math.min(100, (currentVal / targetVal) * 100);
+    
+    document.getElementById('progressBar').style.width = percentage + '%';
+    document.getElementById('progressText').innerText = `${currentVal} / ${targetVal}`;
+    }else alert('This the end');
+  }
+
+  function saveAndClose() {
+      if(currentVal<targetVal){
+      localStorage.setItem("progress", currentVal);
+   dseVocabs(totalList.slice(currentVal-100, currentVal) );}
+   
+  else {
+  dseVocabs(totalList.slice(targetVal-100, targetVal) );
+  currentVal = targetVal;
+
+  }
+
+
+
+
+    closeModal('weekly');
+  }
+
+
+
+
+
+</script>
 
   
    <script>
@@ -1222,8 +1312,26 @@ function openReader(passage){
     #reader-fs-overlay.show { display: flex; }
     #reader-fs-content { max-width: 700px; width: 100%; font-size: 1.3rem; }
     #reader-fs-close { position: fixed; top: 30px; right: 30px; background: #fff; border: 1px solid var(--r-border); padding: 8px 20px; border-radius: 30px; cursor: pointer; color: var(--r-text-light); }
-    #reader-catalogue-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.96); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(15px); }
-    #reader-catalogue-overlay.show { display: flex; }
+#reader-catalogue-overlay { 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(255,255,255,0.96); 
+    display: none; 
+    flex-direction: column; 
+    align-items: center; 
+    /* Changed from center to flex-start so content starts at the top */
+    justify-content: flex-start; 
+    z-index: 9999; 
+    backdrop-filter: blur(15px); 
+    /* Enable vertical scrolling */
+    overflow-y: auto;
+    /* Optional: adds breathing room at the top/bottom */
+    padding: 20px 0; 
+}
+
+#reader-catalogue-overlay.show { 
+    display: flex; 
+}
     .cat-link { font-size: 1.5rem; color: var(--r-text); text-decoration: none; margin: 15px 0; cursor: pointer; display: flex; align-items: center; transition: 0.3s; }
     .cat-link:hover { transform: translateX(10px); color: var(--r-primary); }
 </style>
@@ -1343,7 +1451,8 @@ temp=JSON.stringify(temp).replace(/"/g, '&quot;');
                     alert('copied')">Ai String</span>
                     <span class="action-link" onclick="navigator.clipboard.writeText(document.getElementById('p1-${i}').innerText); alert('copied')">Copy</span>
                     <span class="action-link" onclick="readerPrint('p1-${i}', 'English')">Print</span>
-                    <span class="action-link" onclick="window.location.href='https://www.naturalreaders.com/online/';">@naturalReader</span>
+                    <span class="action-link" onclick="goToReader(document.getElementById('p1-${i}').innerText,1)">@naturalReader</span>
+                    <span class="action-link" onclick="goToReader(document.getElementById('p1-${i}').innerText,2)">@googleTranslate</span>
                     <span class="highlight-toggle" onclick="readerToggleHL(this, 'active-en')">Highlight</span>
                     
                     
@@ -1360,7 +1469,8 @@ temp=JSON.stringify(temp).replace(/"/g, '&quot;');
                             <div class="label"  onclick="readerEnterFS('p2-${i}', 'reader-card-${i}', 'active-zh')">Chinese</div>
                             <span class="action-link" onclick="navigator.clipboard.writeText(document.getElementById('p2-${i}').innerText); readerToast('Chinese', 'passage copied', '--r-secondary')">Copy</span>
                             <span class="action-link" onclick="readerPrint('p2-${i}', 'Chinese')">Print</span>
-                            <span class="action-link" onclick="window.location.href='https://www.naturalreaders.com/online/';">@naturalReader</span>
+                            <span class="action-link" onclick="goToReader(document.getElementById('p2-${i}').innerText,1)">@naturalReader</span>
+                            <span class="action-link" onclick="goToReader(document.getElementById('p2-${i}').innerText,2)">@googleTranslate</span>
                             <span class="highlight-toggle" onclick="readerToggleHL(this, 'active-zh')">Highlight</span>
 
                 </div>
@@ -1369,6 +1479,23 @@ temp=JSON.stringify(temp).replace(/"/g, '&quot;');
         `;
     });
 })();
+</script>
+
+<script>
+
+    function goToReader(text,i){
+
+        
+        navigator.clipboard.writeText(text);
+        // 2. Show confirmation
+        if (confirm(`text copied, do you want to proceed?`)) {
+            if(i==1) window.open('https://www.naturalreaders.com/online/', '_blank');
+
+            else window.open('https://translate.google.com/?source=gtx&sl=en&tl=yue&op=translate','_blank');
+    } else {
+      
+    }
+    }
 </script>
 
 
@@ -1383,6 +1510,67 @@ temp=JSON.stringify(temp).replace(/"/g, '&quot;');
     
 
     <div id="chinese" class="page">
+
+ <div id="youtubex" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('youtubex')">&times;</span>
+    <h3>youtube channels</h3>
+     <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;">
+      
+      <!-- Label 1 -->
+      <a href="https://www.youtube.com/watch?v=dUXzCkZlvxY&t=222s" target="_blank" 
+         style="display: block; padding: 12px; background-color: #f1f1f1; color: #15c4ad; text-decoration: none; border-radius: 30px; font-weight: bold; border: 1px solid #ddd; transition: 0.3s;">
+         範文釋義 - 廉頗藺相如列傳
+      </a>
+
+      <!-- Label 2 -->
+      <a href="https://www.youtube.com/watch?v=qYw93NCtA5E" target="_blank" 
+         style="display: block; padding: 12px; background-color: #f1f1f1; color: #15c4ad; text-decoration: none; border-radius: 30px; font-weight: bold; border: 1px solid #ddd; transition: 0.3s;">
+         故事 - 澠池之會
+      </a>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+ <div id="readingModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('readingModal')">&times;</span>
+    <h3>Text Copied</h3>
+     <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;">
+      
+      <!-- Label 1 -->
+      <a href="textReader.html" target="_blank" 
+         style="display: block; padding: 12px; background-color: #f1f1f1; color: #37b6f6; text-decoration: none; border-radius: 30px; font-weight: bold; border: 1px solid #ddd; transition: 0.3s;">
+         Go To Reader
+      </a>
+
+      <a id='youtubelink' href="" target="_blank" 
+         style="display: block; padding: 12px; background-color: #f1f1f1; color: #37b6f6; text-decoration: none; border-radius: 30px; font-weight: bold; border: 1px solid #ddd; transition: 0.3s;">
+         Watch on Youtube
+      </a>
+      <a id='youtubelink2' href="" target="_blank" 
+         style="display: none; padding: 12px; background-color: #f1f1f1; color: #37b6f6; text-decoration: none; border-radius: 30px; font-weight: bold; border: 1px solid #ddd; transition: 0.3s;">
+         Watch on Youtube
+      </a>
+
+      <!-- Label 2 -->
+      <a  href="https://www.naturalreaders.com/online/" target="_blank" 
+         style="display: block; padding: 12px; background-color: #f1f1f1; color: #37b6f6; text-decoration: none; border-radius: 30px; font-weight: bold; border: 1px solid #ddd; transition: 0.3s;">
+         @naturalReader
+      </a>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
 
 
         
@@ -1422,17 +1610,13 @@ temp=JSON.stringify(temp).replace(/"/g, '&quot;');
             <div class="author-tag">孔子</div>
         </div>
 
-        <!-- <div class="book-card" style="--order: 6" >
-            <div class="book-image" style="background-image: url('https://images.unsplash.com');"></div>
-            <div class="title-strip">史記</div>
-            <div class="author-tag">司馬遷</div>
-        </div>
+ 
 
-        <div class="book-card" style="--order: 7" >
-            <div class="book-image" style="background-image: url('https://images.unsplash.com');"></div>
+        <div class="book-card" style="--order: 7" id="sixkingdoms" >
+            <div class="book-image" style="background-image: url('8.jpeg');"></div>
             <div class="title-strip">六國論</div>
             <div class="author-tag">蘇洵</div>
-        </div> -->
+        </div>
 
         <div class="book-card" style="--order: 8"  id="yylou2" >
             <div class="book-image" style="background-image: url('5.png');"></div>
@@ -1446,63 +1630,115 @@ temp=JSON.stringify(temp).replace(/"/g, '&quot;');
             <div class="author-tag">柳宗元</div>
         </div>
 
-        <!-- <div class="book-card" style="--order: 10" >
-            <div class="book-image" style="background-image: url('https://images.unsplash.com');"></div>
+        <div class="book-card" style="--order: 10" id="threekingdoms">
+            <div class="book-image" style="background-image: url('9.png');"></div>
             <div class="title-strip">出師表</div>
             <div class="author-tag">諸葛亮</div>
         </div>
 
-        <div class="book-card" style="--order: 11">
-            <div class="book-image" style="background-image: url('https://images.unsplash.com');"></div>
-            <div class="title-strip">唐詩三首</div>
-            <div class="author-tag">精選</div>
+
+        <div class="book-card" style="--order: 11" id="shanju">
+            <div class="book-image" style="background-image: url('11.jpeg');"></div>
+            <div class="title-strip">山居秋暝</div>
+            <div class="author-tag">王維</div>
+        </div>
+        <div class="book-card" style="--order: 12" id="yuexia">
+            <div class="book-image" style="background-image: url('10.png');"></div>
+            <div class="title-strip">月下獨酌</div>
+            <div class="author-tag">李白</div>
+        </div>
+        <div class="book-card" style="--order: 13" id="denglou">
+            <div class="book-image" style="background-image: url('12.png');"></div>
+            <div class="title-strip">登樓</div>
+            <div class="author-tag">杜甫</div>
         </div>
 
-        <div class="book-card" style="--order: 12">
-            <div class="book-image" style="background-image: url('1.png');"></div>
-            <div class="title-strip">詞三首</div>
-            <div class="author-tag">精選</div>
-        </div> -->
+        <div class="book-card" style="--order: 14" id="chibi">
+            <div class="book-image" style="background-image: url('13.png');"></div>
+            <div class="title-strip">赤壁懷古</div>
+            <div class="author-tag">蘇軾</div>
+        </div>
+        <div class="book-card" style="--order: 15" id="qiuqing">
+            <div class="book-image" style="background-image: url('14.png');"></div>
+            <div class="title-strip">秋情</div>
+            <div class="author-tag">李清照</div>
+        </div>
+        <div class="book-card" style="--order: 16" id="yuanxi">
+            <div class="book-image" style="background-image: url('15.png');"></div>
+            <div class="title-strip">元夕</div>
+            <div class="author-tag">辛棄疾</div>
+        </div>
+               <div class="book-card" style="--order: 6"  onclick="openModal('youtubex');">
+            <div class="book-image" style="background-image: url('16.png');"></div>
+            <div class="title-strip">史記</div>
+            <div class="author-tag">YOUTUBE</div>
+        </div>
     </div>
    <br>
            <div class="color-picker">
         <!-- <label>Color: </label>
         <input  type="color" id="themeColor" value="#ffcc00"/> -->
         <a href='https://www.naturalreaders.com/online/' style="margin-left: 10px; color:#f37e1f">@naturalReader</a>
+        <!-- <a href='https://www.youtube.com/@standbyuu7199' style="margin-left: 10px; color:#10f0cb;font:bold;">@YOUTUBE</a> -->
     </div>
+
+
 </body>
 
     <script>
+
+
+const channelDict={
+    mengzi2: ['https://www.youtube.com/watch?v=2mXGUA_TJyw&list=PLBJqvvjW--9N_QsUMb2zvU39DbkYLXFWD&index=5'],
+    xunzi2:['https://www.youtube.com/watch?v=TtcdpcZvW40&list=PLBJqvvjW--9N_QsUMb2zvU39DbkYLXFWD&index=8'],
+    zhuangzi2:['https://www.youtube.com/watch?v=fgdCnWBtxrU&list=PLBJqvvjW--9N_QsUMb2zvU39DbkYLXFWD&index=6'],
+    kongzi2:['https://www.youtube.com/watch?v=am4TkEhIcTU&list=PLBJqvvjW--9N_QsUMb2zvU39DbkYLXFWD&index=2'],
+    shishuo2:['https://www.youtube.com/watch?v=iREQDeIY7Pk&list=PLBJqvvjW--9N_QsUMb2zvU39DbkYLXFWD&index=16'],
+    yylou2:['https://www.youtube.com/watch?v=NPTLxcU9Zko&list=PLBJqvvjW--9N_QsUMb2zvU39DbkYLXFWD&index=20'],
+    xishan2:['https://www.youtube.com/watch?v=5QFwpTq4SXQ&list=PLBJqvvjW--9N_QsUMb2zvU39DbkYLXFWD&index=18'],
+    threekingdoms:['https://www.youtube.com/watch?v=EJkSuVi-f5U&list=PLBJqvvjW--9N_QsUMb2zvU39DbkYLXFWD&index=14'],
+    sixkingdoms:['https://www.youtube.com/watch?v=lWyqhHEAOiY&list=PLBJqvvjW--9N_QsUMb2zvU39DbkYLXFWD&index=22'],
+    shanju:['https://youtu.be/4muQCgQ9o5w?t=27'],
+    yuexia:['https://youtu.be/QKoW6P01YsE?t=141'],
+    denglou:['https://youtu.be/0RlIW17GlDk?t=260'],
+    chibi:['https://www.youtube.com/watch?v=zFl3c2YLOC4','https://www.youtube.com/watch?v=qSABP6ogSZ8'],
+    qiuqing:['https://youtu.be/nkAZqh2A4Co?t=566','https://www.youtube.com/watch?v=eNhdYicfECQ'],
+    yuanxi:['https://www.youtube.com/watch?v=26h8id6HL_g&t=16s','https://www.youtube.com/watch?v=PJB6-PyqO1c'],
+
+}
+
+
+
           
 
 document.querySelectorAll('.book-card').forEach(button => {
   button.addEventListener('click', (event) => {
     // 1. Get the ID
+    document.getElementById('youtubelink2').style.display='none';
     const Id = event.currentTarget.id;
+      console.log(channelDict[Id].length);
+      document.getElementById('youtubelink').href=channelDict[Id][0];
+      if(channelDict[Id].length>1) {
 
+        document.getElementById('youtubelink2').href=channelDict[Id][1];
+        document.getElementById('youtubelink2').style.display='block';
+      }
     const formatted = chineseText[Id]
    .replace(/p/g, '-') 
     .replace(/\//g, '\n');
     navigator.clipboard.writeText(formatted);
     // 2. Show confirmation
-    if (confirm(`text copied, do you want to proceed?`)) {
-      launch(Id);
-    } else {
-      
-    }
+      localStorage.setItem('textKey', Id);
+      openModal('readingModal');
+
+   
   });
 });
 
 
-        document.getElementById('themeColor').value= localStorage.getItem('themeColor')||"#ffcc00";
+       
 
-        function launch(key) {
-            
-          //  const color = document.getElementById('themeColor').value;
-            localStorage.setItem('textKey', key);
-          //  localStorage.setItem('themeColor', color);
-            window.location.href = 'textReader.html';
-        }
+
     </script>
 
 
@@ -1532,7 +1768,9 @@ document.querySelectorAll('.book-card').forEach(button => {
             }
         }
     </script>
-
+<!-- <div id="Info" class="page ">
+    info page
+</div> -->
 
 </body>
 </html>

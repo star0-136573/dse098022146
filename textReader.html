@@ -58,8 +58,8 @@
 
         /* --- CONTENT --- */
         .timeline-container {
-            margin-left: 120px; width: 750px; position: relative;
-            padding-left: 60px; border-left: 4px solid var(--line);
+            margin-left: 220px; width: 750px; position: relative;
+            padding-left: 100px; border-left: 4px solid var(--line);
         }
 
         .milestone { animation: plateFade 0.6s ease forwards; }
@@ -147,7 +147,6 @@
     const key = localStorage.getItem('textKey');
 
     rawData=chineseText[key];
-    //const rawData = "p惠子謂莊子曰：「魏王貽我大瓠之種，我樹之成而實五石。/惠子謂莊子曰：惠子對莊子說./魏王：魏國的國君（魏惠王）。/貽：贈送。/我：指惠子。/大瓠之種：大葫蘆的種子。/樹：種植./成：長大成熟./實：果實容量./五石：古代容量單位./p以盛水漿，其堅不能自舉也。剖之以為瓢，則瓠落無所容. /以：用來./盛：裝./水漿：水或液體./其：它./堅：堅硬程度./剖：劈開./瓢：舀水器./瓠落：寬大的樣子./無所容:沒有發揮的地方./p非不呺然大也，吾為其無用而掊之。」/非不：不是不./呺：外大而中空./然: 的樣子./吾：我./為：因為./無用：沒有用處./掊：擊碎.";
 
     let currentIndex = 0;
     let isAutoMuted = false;
@@ -209,7 +208,7 @@
                     <button class="text-speaker-btn" onclick="groupSpeakMeanings()">Listen</button>
                     <div class="sub-points">
                         ${item.details.map(d => `
-                            <div class="data-card" onclick="speak('${d.term}，意思是${d.meaning}')">
+                            <div class="data-card" onclick="speak('${d.term}.....!${d.meaning}')">
                                 <span class="term-tag">${d.term}</span>
                                 <span class="meaning-text">${d.meaning}</span>
                             </div>
@@ -221,13 +220,13 @@
 
         updateUI();
         if (fromNav) {
-            const fullText = `${item.topic}。其中包括：` + item.details.map(d => `${d.term}的意思是${d.meaning}`).join('，');
+            const fullText = `${item.topic}。其中：` + item.details.map(d => `${d.term}....!${d.meaning}`).join('，');
             speak(fullText, true);
         }
     }
 
     function groupSpeakMeanings() {
-        const text = items[currentIndex].details.map(d => `${d.term}的意思是${d.meaning}`).join('，');
+        const text = items[currentIndex].details.map(d => `${d.term}.....!${d.meaning}`).join('，');
         speak(text);
     }
 
@@ -274,10 +273,6 @@
 
     /* ... (rest of the functions remain the same) ... */
 
-    // Final Initialization
-    window.speechSynthesis.onvoiceschanged = () => {};
-    renderPlate();
-    initKeyboard(); // Start listening for keys
 </script>
 
 </body>
