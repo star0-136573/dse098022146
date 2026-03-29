@@ -6717,8 +6717,152 @@ const ex14vocab = [
   { word: "Charade", definition: "An absurd pretense; a fake act / 裝模作樣; 演戲" }
 ];
 
+const ex15vocab = [
+  { word: "Reputation", definition: "The beliefs or opinions that are generally held about someone or something / 名譽、名聲" },
+  { word: "Upsurge", definition: "A sudden and large increase / 急劇上升" },
+  { word: "Exhibition", definition: "A public display of works of art or items of interest / 展覽" },
+  { word: "Traditional wet markets", definition: "Fresh food markets common in Asia / 傳統街市" },
+  { word: "Investigate", definition: "To carry out a systematic or formal inquiry to discover facts / 調查" },
+  { word: "Ventured", definition: "Dared to do something or go somewhere that may be dangerous or unpleasant / 冒險、敢於" },
+  { word: "Ironically", definition: "In a way that seems contrary to what is expected / 諷刺地" },
+  { word: "Iconic", definition: "Relating to a person or thing regarded as a representative symbol / 標誌性的" },
+  { word: "Contributes", definition: "To help to cause or bring about / 貢獻、促成" },
+  { word: "Fictional", definition: "Relating to or occurring in invented stories; not real / 虛構的" },
+  { word: "Passionate", definition: "Having or showing strong feelings or beliefs / 熱情的" },
+  { word: "Astonished", definition: "Greatly surprised or impressed; amazed / 驚訝的" },
+  { word: "Eye-catching", definition: "Immediately appealing or noticeable / 引人注目的" },
+  { word: "Realistic", definition: "Representing things in a way that is accurate and true to life / 逼真的" },
+  { word: "Go all out", definition: "To put all one's energy or resources into a task / 全力以赴" },
+  { word: "Personalized", definition: "Design or produce something to meet someone's individual requirements / 個性化的" },
+  { word: "Self-produced", definition: "Made or created by oneself without outside manufacturing / 自行生產的" },
+  { word: "Inner creativity", definition: "One's natural ability to invent and be original / 內在的創造力" },
+  { word: "Interact", definition: "Act in such a way as to have an effect on another / 交流、互動" },
+  { word: "Fascinating", definition: "Extremely interesting / 迷人的、吸引人的" },
+  { word: "Manga", definition: "A style of Japanese comic books and graphic novels / 日本漫畫" },
+  { word: "Cosplayer", definition: "A person who dresses up as a character from a movie, book, or video game / 角色扮演者" },
+  { word: "Twists on", definition: "Unique or unexpected changes to a traditional style or idea / 獨特的轉變/新意" },
+  { word: "Blew my mind", definition: "To be completely amazed or shocked by something / 令我大開眼界/震驚" },
+  { word: "Proceeded", definition: "To begin or continue a course of action / 繼續進行" },
+  { word: "Booths", definition: "Small temporary structures used for selling or displaying goods / 攤位" },
+  { word: "Figurines", definition: "Statues or small molded figures / 小雕像" },
+  { word: "Community", definition: "A group of people living in the same place or having a particular characteristic in common / 社群、社區" }
+];
 
   
+const ex16vocab = [
+  { word: "Advancement", definition: "The process of promoting or developing something / 進步、發展" },
+  { word: "Monitoring", definition: "To observe and check the progress or quality of something over a period of time / 監控、監測" },
+  { word: "Diverse views", definition: "Different or contrasting opinions on a subject / 多元的觀點" },
+  { word: "Labor productivity", definition: "The amount of goods and services that a worker produces in a given amount of time / 勞動生產力" },
+  { word: "Adversely affect", definition: "To have a negative or harmful impact on something / 不利地影響" },
+  { word: "Explore both sides of the coin", definition: "To examine both the advantages and disadvantages of a situation / 探究事情的兩面" },
+  { word: "Enhancement", definition: "An improvement or increase in quality or value / 提升、增強" },
+  { word: "Shrink", definition: "In a workplace context: to avoid work or neglect duties (shirking) / 偷懶、逃避工作" },
+  { word: "Incentive", definition: "A thing that motivates or encourages someone to do something / 誘因、動力" },
+  { word: "Grilled", definition: "To be questioned intensely or scolded by a superior / 盤問、責備" },
+  { word: "Prominent", definition: "Important or famous; noticeable / 顯著的、重要的" },
+  { word: "Information leakage", definition: "The unauthorized release of confidential information / 資訊洩露" },
+  { word: "Confidential", definition: "Intended to be kept secret / 機密的" },
+  { word: "Scrutiny", definition: "Critical observation or examination / 審查、細查" },
+  { word: "Acute problem", definition: "A situation that is severe or critical / 嚴峻的問題" },
+  { word: "Undermine", definition: "To lessen the effectiveness, power, or ability of something / 削弱、損害" },
+  { word: "Prompt instructions", definition: "Immediate or quick guidance / 即時的指示" },
+  { word: "Conceivable", definition: "Capable of being imagined or grasped mentally / 可想像的" },
+  { word: "Intervention", definition: "The action of becoming intentionally involved in a difficult situation / 干預、介入" },
+  { word: "Deemed", definition: "Regarded or considered in a specified way / 被視為" },
+  { word: "Skeptical", definition: "Not easily convinced; having doubts / 懷疑的" },
+  { word: "Morale", definition: "The confidence, enthusiasm, and discipline of a person or group / 士氣" },
+  { word: "Harmonious", definition: "Friendly and peaceful / 和諧的" },
+  { word: "Double-edged sword", definition: "Something that has both favorable and unfavorable consequences / 雙面刃" },
+  { word: "Strike a balance", definition: "To find a compromise between two opposing points / 取得平衡" },
+  { word: "Broken the internet", definition: "A very popular news story or image that spreads quickly online / 引起轟動、在網上瘋傳" },
+  { word: "Time rate", definition: "A wage payment method based on hours worked rather than output / 計時工資制" },
+  { word: "Multinational", definition: "Including or involving several countries or foreign nations / 跨國的" },
+  { word: "Mutual trust", definition: "Confidence and belief in each other between two parties / 互信" },
+  { word: "Higher notch", definition: "A higher level or standard / 更高水平、更高的層次" },
+  { word: "In a nutshell", definition: "A very brief or concise summary / 簡而言之" },
+  { word: "Augment", definition: "To make something greater by adding to it; increase / 增加、提高" }
+];
+
+
+const ex17vocab = [
+  { word: "Called off", definition: "To cancel or stop an existing policy or event / 取消" },
+  { word: "Resume", definition: "To begin again or continue after a pause / 恢復" },
+  { word: "Struggle to operate", definition: "Having great difficulty keeping a business running / 苦苦經營" },
+  { word: "Blossomed", definition: "To flourish or develop healthily; to be very successful / 興旺、茁壯成長" },
+  { word: "Amidst", definition: "In the middle of or during / 在⋯⋯之中" },
+  { word: "Frustrating times", definition: "Periods characterized by disappointment or lack of progress / 令人糾喪的時期" },
+  { word: "Work from home remotely", definition: "Working from a location other than the central office / 遠端居家辦公" },
+  { word: "Sum of profits", definition: "The total amount of money earned after costs / 利潤總額" },
+  { word: "Inflation", definition: "A general increase in prices and fall in the purchasing value of money / 通貨膨脹" },
+  { word: "Mental breakdowns", definition: "Periods of extreme mental or emotional stress / 精神崩潰" },
+  { word: "Grieves", definition: "Deep sorrow, especially caused by a loss / 悲傷" },
+  { word: "Brainstorming", definition: "A group or individual creativity technique to find a solution / 集思廣益、腦力激盪" },
+  { word: "Immune system", definition: "The body's defense against infectious organisms / 免疫系統" },
+  { word: "Sterilizing", definition: "The process of making something free from bacteria or germs / 消毒" },
+  { word: "Reluctant", definition: "Unwilling and hesitant / 不情願的" },
+  { word: "Relieve the fears", definition: "To make a feeling of anxiety or fear less severe / 緩解恐懼" },
+  { word: "Newly-emerged", definition: "Something that has recently started to exist or appear / 新興的" },
+  { word: "Catering services", definition: "The business of providing food and drink for a group / 餐飲服務" },
+  { word: "Win-win situation", definition: "A result that is good for everyone who is involved / 雙贏局面" },
+  { word: "Devastating", definition: "Highly destructive or causing severe shock / 毀滅性的" },
+  { word: "Obstacles", definition: "Things that block one's way or prevent progress / 障礙" },
+  { word: "Pessimistic", definition: "Tending to see the worst aspect of things / 悲觀的" },
+  { word: "Blessing in disguise", definition: "Something that seems bad at first but results in something good / 塞翁失馬，焉知非福" },
+  { word: "Every cloud has a silver lining", definition: "Every difficult situation has a hopeful or positive side / 守得雲開見月明" },
+  { word: "Fruitful rewards", definition: "Producing good or helpful results / 豐碩的回報" },
+  { word: "Exceptional cases", definition: "Occurrences that do not follow the general rule / 特殊例子" },
+  { word: "Central Business District (CBD)", definition: "The commercial and business centre of a city / 核心商業區" },
+  { word: "Banning dine-in", definition: "Prohibiting eating inside a restaurant / 禁止堂食" },
+  { word: "Protective gear", definition: "Equipment worn to minimize exposure to hazards / 防護裝備" },
+  { word: "Relieve the fears", definition: "To reduce or remove anxiety / 減輕恐懼" },
+  { word: "Cope with", definition: "To deal effectively with something difficult / 應付、處理" },
+  { word: "Misfortune", definition: "Bad luck or an unfortunate event / 不幸、災禍" }
+];
+
+const ex18vocab = [
+  { word: "Composed", definition: "Created or written (typically music or literature) / 創作、譜曲" },
+  { word: "Without a doubt", definition: "Certainly; used to emphasize that something is true / 毫無疑問" },
+  { word: "Submissions", definition: "Work presented for judgment or consideration / 提交的作品" },
+  { word: "Unified", definition: "Uniform or made consistent / 統一的" },
+  { word: "Called into question", definition: "To cause doubts about something / 受到質疑" },
+  { word: "Troves of information", definition: "A large store of valuable data or knowledge / 大量的資訊寶庫" },
+  { word: "Comprehend", definition: "To grasp or understand fully / 理解、領悟" },
+  { word: "Disadvantage", definition: "An unfavorable circumstance or condition / 劣勢" },
+  { word: "Biological", definition: "Relating to living organisms (humans) / 生物的、人類的" },
+  { word: "Inspiration", definition: "The process of being mentally stimulated to do something creative / 靈感" },
+  { word: "Probability", definition: "The extent to which something is likely to happen / 概率、可能性" },
+  { word: "Taken into account", definition: "To consider or remember when judging a situation / 考慮到" },
+  { word: "Up-and-coming", definition: "Likely to be successful and popular in the near future / 嶄露頭角的、大有前途的" },
+  { word: "Goes against", definition: "To be opposite to or conflict with / 違反、背道而馳" },
+  { word: "Direct proportion", definition: "A relationship where one amount increases as another does / 成正比" },
+  { word: "Enforce a ban", definition: "To make sure a prohibition is obeyed / 執行禁令" },
+  { word: "Mainstream", definition: "Representing widespread current thought or influence / 主流的" },
+  { word: "Scratching their heads", definition: "To be confused or puzzled by a problem / 百思不得其解" },
+  { word: "Aid the blind", definition: "To help people who cannot see / 協助盲人" },
+  { word: "Depict novel concepts", definition: "To represent new and original ideas / 描繪新穎的概念" },
+  { word: "Prohibited", definition: "Formally forbidden by law or rule / 被禁止的" },
+  { word: "Utilized", definition: "To make practical or effective use of / 利用、運用" },
+  { word: "Soundtracks", definition: "The music accompanying a movie or game / 配樂" },
+  { word: "Stick their circuits into", definition: "An idiom meaning to interfere or get involved in (humorous) / 插手、介入" },
+  { word: "Global", definition: "Relating to the whole world; worldwide / 全球的" },
+  { word: "Common characteristics", definition: "Features or qualities that are shared by many / 共同特徵" },
+  { word: "Public eye", definition: "The state of being known or watched by many people / 公眾視野" },
+  { word: "Valuables", definition: "Things that are worth a lot of money / 貴重物品" },
+  { word: "Conflict with", definition: "To be incompatible or at variance with / 衝突、矛盾" },
+  { word: "Mainstream", definition: "The ideas or activities that are regarded as normal or conventional / 主流" },
+  { word: "Oversized puffy down jacket", definition: "A large, thick winter coat filled with feathers / 特大號蓬鬆羽絨褸" },
+  { word: "Effective measures", definition: "Successful actions taken to achieve a result / 有效措施" }
+];
+
+
+
+
+
+
+
+
+
 
 const textData=[
 {
@@ -7013,14 +7157,88 @@ This incident has raised a broader question: why have we cultivated a generation
   vocab:ex14vocab,
 },
 {
-  passage1:`xxx\n\n`,
-  passage2:``,
-  vocab:ex14vocab,
+  passage1:`Title: Does Anime Bring Creativity to the Table?\n\n
+Anime has had a reputation of being called weird for the longest time. Until recently, where there has been an upsurge of Anime-watchers. Even I, myself, have touched the surface of it a little bit. Anime Expo, Hong Kong’s biggest anime, manga, and video game exhibition had opened last weekend and it had been busier than traditional wet markets. I had set out on a mission to investigate the world within the exhibition that many have ventured to go into, to update people who have not.\n
+Anime Expo brought a whole other world to life. Ironically, it felt as if going into an anime world itself. A world where humans share the same interests and where peace only exists. The most iconic part of this world, that also contributes to making it a whole other world, are the cosplayers. As many already know, cosplaying is when a person dresses up as a fictional character, or another person that is not themselves. In this case, many people had cosplayed as various anime characters.\n
+I had talked to two women who were friends, that had cosplayed together as male characters. One had dressed up as Uzumaki Naruto from the anime, Naruto. And the other had dressed up as Roronoa Zoro from the anime, One Piece. “It’s always fun to dress up as your favourite characters with your friends. Sometimes, we pretend to act like the actual characters and it’s really fun.” They had also said that since the original characters were male, and they were females, they get to put their own twists on the outfits. Making their own girl versions of them. “It’s exciting to be creative about things you’re passionate about,” one of the friends added.\n
+While some cosplayers simply dress up looking somewhat like their characters, others have gone all the way, recreating the entire design. One other person I interviewed, looked as if they were an anime character themselves. I was astonished. They wore an uniform, an eye patch, a samurai sword, and the most eye-catching part were all the jewelry around his head, neck and waist. I asked him to introduce his character, “I’m cosplaying as Uzui Tengen from Demon Slayer. He really likes gems and shiny stuff, so he is always wearing them.” Of course they had not been real, but were made from plastic and paper, which blew my mind as they looked more realistic than the actual things. So why did he go all out? “I like to express and challenge myself to recreate characters that people might think are impossible to recreate. And I love to see people’s shocked expressions afterward. It makes me happy.” I had proceeded to take a picture with him afterwards.\n
+Other than cosplayers, you see a whole section of booths where people sell their personalized items. I was amazed to see how much effort and idea people put into making everything. For example, there was a video game booth for the game, Genshin Impact. They sold pins, banners, figurines and even school folders. And it was shocking how they self-designed and self-produced. Most of the booths, however, were mostly for anime and manga. But it was all the same. They had fan art of characters and in some booths, actually sold the original mangas.\n
+In the end, Anime Expo was a place where people got to enjoy that certain period together, and in some cases may be one of the best days of the year. Setting booths is just people’s ways of showing their business and art skills towards topics they are truly passionate about. And cosplayers too, just like cosplaying book or Marvel characters, or choosing to put on make-up, or doing stand-up comedy, it’s all something someone does for their enjoyment and happiness. Anime Expo really brings the best of abilities out of people and drag out their inner creativity. While bringing the whole community together in one place to interact and communicate. I believe that everyone, anime-watchers or non-anime-watchers, should experience this fascinating moment at least once in their life. As the community becomes bigger, the more creative people will become.`,
+  passage2:`Title: Does Anime Bring Creativity to the Table?\n\n
+長期以來，動漫一直被標籤為「怪異」，直到最近出現咗一個 upsurge。連我自己都開始 touched the surface。上個禮拜，香港最大型嘅動漫、manga 同 video game 嘅 exhibition —— 動漫節開幕咗，入面仲忙過 traditional wet markets。我決定展開一場任務去 investigate 入面嘅世界，好多人都曾經 ventured 入去，我想為未去過嘅人更新一下資訊。\n
+動漫節將另一個世界帶入咗現實。Ironically，嗰種感覺就好似真係入咗去一個動漫世界咁，一個人類擁有相同興趣、而且只有和平嘅世界。呢個世界入面最 iconic 嘅部分，亦都係 contributes 令佢變成另一個世界嘅原因，就係班 cosplayers。正如好多人所知，cosplaying 係指一個人打扮成 fictional 角色，或者一個唔係自己嘅人。喺呢個場合，好多人都 cosplayed 做唔同嘅動漫角色。\n
+我同兩位朋友傾過偈，佢哋一齊 cosplayed 做男角色。一個打扮成《火影忍者》嘅主角，另一個就係《海賊王》嘅卓洛。「同朋友一齊打扮成自己 passionate 嘅角色係好開心嘅。有時我哋會扮到好似個角色咁，真係好有趣。」佢哋仲話，因為原著角色係男仔，而佢哋係女仔，所以佢哋可以喺造型上加入自己嘅 twists on，整成女仔版。「對自己 passionate 嘅嘢發揮創意係好令人興奮嘅，」其中一位朋友補充。\n
+雖然有啲 cosplayers 只係著到同角色有啲似，但有啲人就 go all out，重現成個設計。我訪問咗另一位人士，佢望落簡直就係個動漫角色本人咁。我感到好 astonished。佢著住制服，戴住眼罩，拎住武士刀，而最 eye-catching 嘅係佢頭部、頸部同腰間嘅珠寶。我請佢介紹下自己嘅角色：「我係 cosplaying 緊《鬼滅之刃》嘅宇髄天元。佢好鍾意寶石同閃令令嘅嘢，所以成日戴住。」當然，啲珠寶唔係真嘅，而係用膠同紙整嘅，呢點簡直 blew my mind，因為佢哋望落比真嘢仲更 realistic。點解佢要咁盡力？「我鍾意挑戰自己去重現一啲人哋覺得唔可能嘅角色，並透過咁樣去 express 自己。我好鍾意睇到人哋嗰種驚訝嘅表情，令我覺得好開心。」之後，我 proceeded 同佢影咗張相。\n
+除咗 cosplayers 之外，你會見到成區嘅 booths 賣緊 personalized 嘅產品。見到大家付出咗咁多心機同創意去整嘢，我真係好驚訝。例如，有個《原神》嘅遊戲 booth 賣緊襟章、banner、figurines 甚至學具。最令人震驚嘅係，呢啲全部都係佢哋 self-designed 同 self-produced 嘅。雖然大部分 booths 係賣動漫同 manga，但性質都係一樣。佢哋有角色嘅同人畫作，有啲攤位仲會賣原著 manga。\n
+最後，動漫節係一個俾大家一齊享受特定時光嘅地方，甚至係一年中最正嘅日子。設置 booths 係展示大家對熱愛事物嘅藝術技能同商業頭腦嘅方式。而 cosplayers 其實就好似啲人 cos 緊書本或 Marvel 角色、化妝、或者做棟篤笑一樣，都係為咗享受同快樂。動漫節真係將大家嘅 best of abilities 同 inner creativity 帶咗出嚟。同時令成個 community 聚埋一齊 interact 同溝通。我相信無論係動漫迷定非動漫迷，一生人都應該體驗一次呢個 fascinating 嘅時刻。隨著呢個社群變大，大家會變得更有創意。`,
+  vocab:ex15vocab,
 },
 {
-  passage1:`xxx\n\n`,
-  passage2:``,
-  vocab:ex14vocab,
+  passage1:`Title: Pros and cons of monitoring employees in the workplace\n\n
+Nowadays, with the advancement of technology, it is not uncommon for us to spot cameras everywhere, from CCTV in shops to car cameras. However, CCTV installed in offices seems not enough in the eyes of employers. This is a growing trend that employers start using cameras and computer software to monitor what employees are doing in the workplace. Various camps have diverse views regarding this issue. Some contend that it can increase labour productivity while some think that it will adversely affect job satisfaction. In this essay, I will explore both sides of the coin.\n
+First and foremost, the most obvious benefit of monitoring employees in the workplace will be an enhancement in productivity of workers, which is the goal of many human resources managers. According to a research by the business faculty of HKU, which aims at figuring out the relationship between wage payment methods and labour productivity, the results reveals that workers receive wages base on time rate are more likely to shrink during working hours. Time rate is in fact the most common wage payment method in various industries, which means that workers like clerks, secretary, security are probable to have a lower working incentive as these job are paid at time rate. Monitoring employees via cameras and computer software will be an ideal solution to the situation as workers are aware of the fact that their boss are monitoring them anytime behind the camera. If workers fall asleep or using their computer for entertainment, they may be grilled by their supervisors. It is therefore very clear that workers will pay more attention to their responsibilities under close supervision.\n
+Another prominent advantage of monitoring employees in the workplace is the reduction in the risk of information leakage. There was a news that broken the internet few months ago. An multinational accounting firm was sued for leaking the personal information of their clients, which supposed to be kept highly confidential. A close scrutiny to the issue figured out that some workers had used their personal whatsapp accounts for job communication, which leads to the leakage of private information of clients. This is an acute problem that can even undermine people’s confidence towards the company. Installing monitoring software on every computer of workers can prevent similar incident from happening again. Certain computer softwares allow mangers to check the conversations of workers online. In this way, managers can not only monitor the working progress of their team, but also give prompt instructions when their workers do something wrong or illegal.\n
+Nevertheless, it would be unfair if we only focus on the upsides of monitoring employees. Here is the other side of the coin.\n
+Monitoring employees in the workplace result in a lower job satisfaction. It is conceivable that when employers keep checking on the working progress of employees frequently, they tend to give opinion on employee’s works. It will be annoying if workers receive feedbacks too oftenly. Besides, workers will have less freedom in finishing their task if their boss keep evaluating their work. Many experts in the cooperation world have pointed out that the more intervention from employers, the lower is the job satisfaction.\n
+Last be not least, another drawback of monitoring employees in the workplace is the worsened employer-employee relationship. Installing cameras and computer software may be deemed as a kind of untrust in the eyes of employees. Think about why employers install computer software to monitor their workers — it is due to a sense of unsecurity, the employers are skeptical that employees will not work hard without close supervision. The motivation behind the installation of camera may break the bond between employers and employees, causing misunderstanding and adversely affect the morale of workers. Employers and employees are in a team that work together to achieve goals. Hardly can the efficiency of the company be taken to a higher notch without a harmonious working environment.\n
+In a nutshell, monitoring employees in the workplace is a double-edged sword. It augment productivity while undermining job satisfaction. It is vital that employers strike a balance between monitoring their workers and building up mutual trust with employees. `,
+  passage2:`Title: Pros and cons of monitoring employees in the workplace\n\n
+現今社會隨住科技嘅 advancement，周圍見到攝像頭已經唔係咩新鮮事，由鋪頭嘅 CCTV 到車 Cam 都有。不過，喺老細眼中，office 裝 CCTV 好似仲未夠。而家有個 growing trend，就係老細開始用鏡頭同電腦軟件去 monitoring 員工喺公司做緊咩。對於呢個議題，唔同陣營有 diverse views。有人主張咁樣可以增加 labor productivity，但亦有人覺得咁樣會 adversely affect 工作滿足感。喺呢篇文入面，我會 explore both sides of the coin。\n
+首先，喺職場 monitoring 員工最明顯嘅好處，就係 enhancement 員工嘅生產力，呢個亦係好多人力資源經理嘅目標。根據香港大學商學院一項研究，旨在搵出 time rate 出糧方式同 labor productivity 之間嘅關係，結果顯示按 time rate 計人工嘅員工，喺工作時間內較容易 shrink。事實上，time rate 係好多行業最常見嘅出糧方式，即係話文員、秘書、保安呢類職位，因為係按時計酬，工作 incentive 可能會較低。透過鏡頭同軟件 monitoring 員工會係一個理想嘅解決方案，因為員工會意識到老細隨時喺鏡頭後面睇住。如果員工返工瞓覺或者用電腦玩，佢哋可能會被上司 grilled。所以好明顯，喺嚴密監督下，員工會更加專注於自己嘅職責。\n
+另一個 monitoring 員工嘅 prominent 優點係減少 information leakage 嘅風險。幾個月前有一則新聞 broken the internet，一間 multinational 會計師行因為洩露客入個人資料而被控告，而呢啲資料理應係高度 confidential。對呢件事進行詳細 scrutiny 後發現，有員工用私人 WhatsApp 處理公事，導致客戶私隱外洩。呢個係一個 acute problem，甚至會 undermine 公眾對公司嘅信心。喺每部電腦裝 monitoring 軟件可以防止類似事件發生。某啲軟件可以俾經理檢查員工嘅網上對話，咁樣經理唔單止可以監察團隊進度，仲可以喺員工做錯事或犯法時俾出 prompt instructions。\n
+然而，如果我哋只睇 monitoring 員工嘅好處係唔公平嘅，呢度係 the other side of the coin。
+喺職場 monitoring 員工會導致工作滿足感下降。可以 conceivable 嘅係，當老細頻繁檢查進度，佢哋往往會對員工嘅表現俾意見。如果員工太常收到 feedback，會覺得好煩。而且，如果老細不斷評價佢哋嘅表現，員工處理工作嘅自由度就會減少。好多企業專家指出，老細越多 intervention，員工嘅工作滿足感就越低。\n
+最後，另一個弊處係會令勞資關係轉差。裝鏡頭同軟件可能會被員工 deemed 為一種唔信任。諗下老細點解要裝呢啲嘢——係因為一種唔安全感，老細 skeptical 員工如果冇監督就唔會努力工作。安裝鏡頭背後嘅動機可能會破壞雙方關係，造成誤解並 adversely affect 員工嘅 morale。老細同員工係一個團隊，要一齊達成目標，如果冇一個 harmonious 嘅工作環境，公司嘅效率好難攞到 higher notch。
+In a nutshell，喺職場 monitoring 員工係一把 double-edged sword。佢可以 augment 生產力，但同時會 undermine 工作滿足感。最重要嘅係，老細要識得喺 monitoring 員工同建立 mutual trust 之間 strike a balance。`,
+  vocab:ex16vocab,
+},
+{
+  passage1:`Title: A Bright Restaurant in the Dark Pandemic\n\n\n
+The government has just called off ‘social-distancing’, masks and quarantine policies, people start to resume their normal lives and the number of economic opportunities has risen. This marks the end of the pandemic. Moreover, recalling back to the tough times when the pandemic was serious, most people stayed at home and barely went out to eat, making restaurants struggle to operate. However, there are always exceptional cases. I have interviewed the owner of Happy Cafe, Peter Chan, a restaurant that blossomed admist the frustrating times.\n
+Brief Introduction\n
+Happy Cafe is a modern restaurant located in a dark alley in the heart of Hong Kong—Central. Run by Peter Chan, he sells fashion food at a reasonable price. Before the pandemic, a wide range of people working in the Central Business District come to gather and eat during lunchtimes, providing Peter Chan quite a large sum of profits.\n
+Problems during the Pandemic\n
+During the pandemic, most people avoided going out and preferred to stay at home. All businessmen and businesswomen began to work from home remotely. Central has become so empty and quiet that nobody could ever imagine. All shops shut down and nobody were walking on the streets. There was barely any office workers visiting Chan's shop, and he had zero earnings. With the aid of banning dine-in during nighttime, Chan couldn't even welcome any customers who were not a part of the working force in the CBDs. On top of that, the owner of his store raised the rent by 30% as a matter of fact of inflation. “It was the hardest times of my life as I had no income at all” Chan sighed. He also added, “There were no customers”.\n
+How He solved the Problems\n
+Chan realised that he should not keep his negative and hopeless attitude. As a result, after he went into a few mental breakdowns and grieves but he came up with two ways to boost his sales after countless nights of brainstorming.\n
+Firstly, he started making and delivering fashion healthy mealboxes with ingredients such as fruits and vegetables that level up people's immune system. For instance, apple-pineapple fried rice and veggie sushi rolls. Then, he would post videos of him sterilizing himself and wearing protective gears to make the mealboxes on social media. During the pandemic, people were worried that the chefs in restaurant might be carrying infectious disease and would spread germs to the food they prepared. Therefore, people were reluctant to purchase takeaways. “My approach can relieve the fears of people” Chan said. “This allows people to put down their concerns” he added. After watching Chan's videos on social media, audiences can call Happy Cafe's hotline directly to order the mealboxes. “I would drive my car and send the orders to people” Chan said.\n
+Secondly, he rented his dine-in area to newly-emerged pandemic-related companies and provided catering services to the workers there. For example, mask companies rented his dine-in area for storing and packaging products. While the companies paid him rent higher than the market price he could earn a little money to cover operation costs. Besides, he could get some more profits by providing lunch, dinner, snacks and drinks to the workers there. “By doing so, I feel like I was helping to cope with the pandemic because workers from masks and sterilizing product companies are doing their jobs in my restaurant.” Chan said. Chan agreed that it was a win-win situation for both himself and the companies as he can gain income and the companies could cut their operation costs. On top of that, he could advertise his restaurant to the workers of these companies. “When they tried my food, they were so satisfied and claimed that they would come back again to visit my restaurant when the pandemic recovers,” Chan added with excitement. Many of his customers now are either those workers or those worker’s family and friends.\n
+The situation may be devastating when there are many obstacles in life. Many may feel disappointed, discouraged, or even pessimistic. However, misfortune might be a blessing in disguise. Every cloud has a silver lining and by learning how Peter Chan deals with business during the pandemic, the challenges in running a dream restaurant, everyone can operate their dream restaurant successfully and gain a lot of fruitful rewards!`,
+  passage2:`Title: A Bright Restaurant in the Dark Pandemic\n\n
+政府啱啱 called off 咗隔離政策，大家開始 resume 正常生活。回想返疫情嚴重嘅 frustrating times，大部分餐廳都 struggle to operate。不過，總有啲 exceptional cases。「Happy Cafe」就係一間喺逆境中 blossomed 嘅餐廳。\n
+簡介\n
+Happy Cafe 位於 Central Business District (CBD) 嘅暗巷入面。喺疫情之前，好多喺 CBD 返工嘅人會去幫襯，為老闆帶嚟唔少 sum of profits。\n
+疫情期間嘅問題\n
+疫情期間，大家 work from home remotely，條街靜到無人。因為政府 banning dine-in，加上 inflation 令租金加咗 30%，Peter Chan 話嗰陣係人生最難捱嘅時期。\n
+佢點樣解決問題\n
+雖然經歷過 mental breakdowns 同 grieves，但 Peter 透過 brainstorming 諗到新出路。首先，佢整一啲可以增強 immune system 嘅餐盒，仲拍片影住自己整嘢食前做足 sterilizing 同着晒 protective gear。好多人原本好 reluctant 買外賣，但呢個做法成功 relieve the fears，等客放心訂餐。\n
+第二，佢將鋪頭租俾一啲 newly-emerged 嘅防疫公司，仲提供埋 catering services 俾嗰度嘅員工。Peter 覺得咁樣係幫手 cope with 疫情，亦係一個 win-win situation。\n
+雖然遇到好多 obstacles，情況好 devastating，但 Peter 無變到好 pessimistic。佢證明咗 misfortune 可能係 blessing in disguise。正所謂 every cloud has a silver lining，只要肯努力，每個人都可以獲得 fruitful rewards！`,
+  vocab:ex17vocab,
+},
+{
+  passage1:`AI generated songs won competitions.\n\n
+Dear Editor,\n
+I am writing in response to the recent news that a song ‘composed’ by artificial intelligence won first prize in a global song-writing competition. I would like to express my opinion that, without a doubt, songs generated by AI should not be allowed as submissions to these competitions.\n
+Fairness is a value shared across all competitions. A sports event, for example, has a single finish line; a writing contest has unified word and time limits. If AI is introduced into a competition, however, the principle of equality is called into question: AI has the ability to draw upon vast troves of information on the Internet, so much information that the human mind cannot possibly comprehend it all. This already puts human competitors at a disadvantage.\n
+Furthermore, whereas biological songwriters need inspiration and thought, a computer does not: it merely analyses the most popular songs on the Web, finds their common characteristics, and generates a piece of music which shares all of those features. As a result, an AI program has a much higher probability of producing a song which is pleasing to the ears than even a talented musician, especially if time is limited — another unfair advantage.
+The goal of the contest should also be taken into account: song-writing competitions aim to promote creativity and bring up-and-coming composers into the public eye. The use of AI goes against both of these targets, since neither creativity nor talent is necessary to produce a computer-generated song.\n
+Lastly, there is, of course, the issue of rewards and interests. Becoming the champion of a competition usually brings more than a certificate: most organizers offer rewards in the forms of cash, valuables or tickets and vouchers. These would then go to the person who submitted the computer-generated piece, despite them only having to do a series of clicks and button presses. This is clearly in conflict with society’s ideal that what a person gains should bear a direct proportion to their effort and ability.\n
+Two questions then remain: how we can enforce a ban on the use of AI in contests, and whether AI-generated music has a function in society.\n
+Ever since programs such as Chat GPT, Midjourney and DALL-E have become mainstream, experts around the globe have been scratching their heads with regards to the first question. It is not one that I have the necessary technical knowledge to answer. As for the second, I believe we can look to the success of existing AI programs: text-to-speech systems are used to aid the blind, as well as providing voiceovers on streams and videos; computer-generated art is used for book covers; AI-produced images help explore and depict novel concepts — such as Pope Francis wearing an oversized puffy down jacket — thus supporting creativity.\n
+The fact that AI-generated music should not be allowed in competitions does not imply that its use ought to be generally prohibited. I can think of several ways it can be utilized: as background music in shops, as audio in advertisements, or even as video game and movie soundtracks as the technology improves. I look forward to seeing these future developments, just as I wish to see effective measures for ensuring that these programs do not stick their circuits into formal competitions.\n
+Yours sincerely,\n
+Chris Wong`,
+  passage2:`AI generated songs won competitions.\n\n
+致編輯：\n
+我寫呢封信係想回應最近一首由 AI composed 嘅歌喺 global 作曲比賽攞咗冠軍嘅新聞。我想表達我嘅觀點，就係 without a doubt，AI 生成嘅歌唔應該被准許作為 submissions。\n
+公平係所有比賽嘅共同價值。但如果將 AI 引入比賽，公平原則就會 called into question：AI 有能力喺網上提取 troves of information，大到人類大腦無可能完全 comprehend。呢點已經令到人類參賽者處於 disadvantage。\n
+此外，biological 嘅作曲家需要 inspiration。而電腦純粹係分析網上流行曲嘅 common characteristics，然後生成一首具備呢啲特徵嘅歌。結果，AI 程式有極高 probability 產出一首好聽嘅歌。
+比賽嘅目標亦應該被 taken into account：作曲比賽係想將 up-and-coming 嘅作曲家帶入 public eye。使用 AI goes against 呢兩個目標。最後，獎勵應該同努力成 direct proportion，將獎金同 valuables 俾一個只係撳咗幾吓掣嘅人，明顯同社會理想有 conflict with。\n
+依家剩低兩個問題：我哋點樣 enforce a ban？同埋 AI 音樂有無功能？自從 AI 變成 mainstream，全球專家都對第一個問題 scratching their heads。至於第二點，AI 可以 aid the blind，或者幫手 depict novel concepts（好似教宗着住件 oversized puffy down jacket 咁），從而支持創意。\n
+AI 歌唔應該入比賽，並唔代表要全面 prohibited。我諗到幾個可以 utilized 嘅方法：例如做廣告音效，或者電影 soundtracks。我期待呢啲發展，同時亦希望有 effective measures，確保呢啲程式唔會 stick their circuits into 正式嘅比賽。\n
+Chris Wong 謹啟`,
+  vocab:ex18vocab,
 },
 
 ]
